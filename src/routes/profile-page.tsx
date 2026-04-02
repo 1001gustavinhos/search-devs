@@ -371,7 +371,7 @@ export function ProfilePage() {
         >
           <UserProfileCard user={user} />
 
-          {/* Placeholder: no Figma design has this contact button but no behavior guidance was found; for now it opens the user's GitHub profile and should be replaced after orientation. */}
+          {/* Placeholder: Figma design has this contact button but no behavior guidance was found; for now it opens the user's GitHub profile and should be replaced after orientation. */}
           <Button
             as={Link}
             href={user.html_url}
