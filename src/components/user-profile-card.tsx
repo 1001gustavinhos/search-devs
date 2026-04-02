@@ -2,13 +2,17 @@ import {
   Avatar,
   Card,
   CardBody,
+  Box,
   HStack,
   Link,
   List,
   ListItem,
   Stack,
   Text,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react";
+import type { ReactNode } from "react";
 import {
   AtSign,
   Building2,
@@ -24,6 +28,20 @@ import type { GithubUser } from "../domain/github-user.ts";
 type UserProfileCardProps = {
   user: GithubUser;
 };
+
+function InfoIcon({ children }: { children: ReactNode }) {
+  return (
+    <Box
+      boxSize="24px"
+      display="inline-flex"
+      alignItems="center"
+      justifyContent="center"
+      flexShrink={0}
+    >
+      {children}
+    </Box>
+  );
+}
 
 function normalizeWebsiteUrl(url: string | null) {
   if (!url) {
@@ -126,96 +144,213 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
             </Stack>
           </HStack>
 
-          {normalizedBio ? <Text>{normalizedBio}</Text> : null}
-
-          <List spacing={2} color="brand.text">
-            <ListItem>
-              <HStack spacing={2} align="start">
-                <Users size={16} />
+          <Box display={{ base: "block", md: "none" }}>
+            <HStack spacing={6} align="center" flexWrap="wrap">
+              <HStack spacing={1}>
+                <InfoIcon>
+                  <Users size={18} />
+                </InfoIcon>
                 <Text>
                   {t("profile.statsFollowers")}: {user.followers}
                 </Text>
               </HStack>
-            </ListItem>
 
-            <ListItem>
-              <HStack spacing={2} align="start">
-                <UserPlus size={16} />
+              <HStack spacing={1}>
+                <InfoIcon>
+                  <UserPlus size={18} />
+                </InfoIcon>
                 <Text>
                   {t("profile.statsFollowing")}: {user.following}
                 </Text>
               </HStack>
-            </ListItem>
+            </HStack>
 
-            {user.company !== null ? (
+            {normalizedBio ? (
+              <Text mt={3} color="brand.text">
+                {normalizedBio}
+              </Text>
+            ) : null}
+
+            <Wrap mt={3} spacing={3} color="brand.text">
+              {user.company !== null ? (
+                <WrapItem>
+                  <HStack spacing={2} align="center">
+                    <InfoIcon>
+                      <Building2 size={18} />
+                    </InfoIcon>
+                    <Text>{user.company}</Text>
+                  </HStack>
+                </WrapItem>
+              ) : null}
+
+              {normalizedLocation ? (
+                <WrapItem>
+                  <HStack spacing={2} align="center">
+                    <InfoIcon>
+                      <MapPin size={18} />
+                    </InfoIcon>
+                    <Text>{normalizedLocation}</Text>
+                  </HStack>
+                </WrapItem>
+              ) : null}
+
+              {normalizedEmail ? (
+                <WrapItem>
+                  <HStack spacing={2} align="center">
+                    <InfoIcon>
+                      <Mail size={18} />
+                    </InfoIcon>
+                    <Link
+                      href={`mailto:${normalizedEmail}`}
+                      color="brand.accent"
+                    >
+                      {normalizedEmail}
+                    </Link>
+                  </HStack>
+                </WrapItem>
+              ) : null}
+
+              {websiteUrl && websiteDisplayText ? (
+                <WrapItem>
+                  <HStack spacing={2} align="center">
+                    <InfoIcon>
+                      <Globe size={18} />
+                    </InfoIcon>
+                    <Link
+                      href={websiteUrl}
+                      isExternal
+                      rel="noopener noreferrer"
+                      color="brand.text"
+                      wordBreak="break-all"
+                    >
+                      {websiteDisplayText}
+                    </Link>
+                  </HStack>
+                </WrapItem>
+              ) : null}
+
+              {twitterUrl && twitterUsername ? (
+                <WrapItem>
+                  <HStack spacing={2} align="center">
+                    <InfoIcon>
+                      <AtSign size={18} />
+                    </InfoIcon>
+                    <Link
+                      href={twitterUrl}
+                      isExternal
+                      rel="noopener noreferrer"
+                      color="brand.accent"
+                    >
+                      @{twitterUsername}
+                    </Link>
+                  </HStack>
+                </WrapItem>
+              ) : null}
+            </Wrap>
+          </Box>
+
+          <Box display={{ base: "none", md: "block" }}>
+            {normalizedBio ? <Text>{normalizedBio}</Text> : null}
+
+            <List spacing={2} color="brand.text" mt={normalizedBio ? 3 : 0}>
               <ListItem>
-                <HStack spacing={2} align="start">
-                  <Building2 size={16} />
+                <HStack spacing={2} align="center">
+                  <InfoIcon>
+                    <Users size={18} />
+                  </InfoIcon>
                   <Text>
-                    {t("profile.userCompany")}: {user.company}
+                    {t("profile.statsFollowers")}: {user.followers}
                   </Text>
                 </HStack>
               </ListItem>
-            ) : null}
 
-            {normalizedLocation ? (
               <ListItem>
-                <HStack spacing={2} align="start">
-                  <MapPin size={16} />
+                <HStack spacing={2} align="center">
+                  <InfoIcon>
+                    <UserPlus size={18} />
+                  </InfoIcon>
                   <Text>
-                    {t("profile.userLocation")}: {normalizedLocation}
+                    {t("profile.statsFollowing")}: {user.following}
                   </Text>
                 </HStack>
               </ListItem>
-            ) : null}
 
-            {normalizedEmail ? (
-              <ListItem>
-                <HStack spacing={2} align="start">
-                  <Mail size={16} />
-                  <Text>{t("profile.userEmail")}:</Text>
-                  <Link href={`mailto:${normalizedEmail}`} color="brand.accent">
-                    {normalizedEmail}
-                  </Link>
-                </HStack>
-              </ListItem>
-            ) : null}
+              {user.company !== null ? (
+                <ListItem>
+                  <HStack spacing={2} align="center">
+                    <InfoIcon>
+                      <Building2 size={18} />
+                    </InfoIcon>
+                    <Text>{user.company}</Text>
+                  </HStack>
+                </ListItem>
+              ) : null}
 
-            {websiteUrl && websiteDisplayText ? (
-              <ListItem>
-                <HStack spacing={2} align="start">
-                  <Globe size={16} />
-                  <Text>{t("profile.userWebsite")}:</Text>
-                  <Link
-                    href={websiteUrl}
-                    isExternal
-                    rel="noopener noreferrer"
-                    color="brand.accent"
-                    wordBreak="break-all"
-                  >
-                    {websiteDisplayText}
-                  </Link>
-                </HStack>
-              </ListItem>
-            ) : null}
+              {normalizedLocation ? (
+                <ListItem>
+                  <HStack spacing={2} align="center">
+                    <InfoIcon>
+                      <MapPin size={18} />
+                    </InfoIcon>
+                    <Text>{normalizedLocation}</Text>
+                  </HStack>
+                </ListItem>
+              ) : null}
 
-            {twitterUrl && twitterUsername ? (
-              <ListItem>
-                <HStack spacing={2} align="start">
-                  <AtSign size={16} />
-                  <Text>{t("profile.userTwitter")}:</Text>
-                  <Link
-                    href={twitterUrl}
-                    isExternal
-                    rel="noopener noreferrer"
-                    color="brand.accent"
-                  >
-                    @{twitterUsername}
-                  </Link>
-                </HStack>
-              </ListItem>
-            ) : null}
-          </List>
+              {normalizedEmail ? (
+                <ListItem>
+                  <HStack spacing={2} align="center">
+                    <InfoIcon>
+                      <Mail size={18} />
+                    </InfoIcon>
+                    <Link
+                      href={`mailto:${normalizedEmail}`}
+                      color="brand.accent"
+                    >
+                      {normalizedEmail}
+                    </Link>
+                  </HStack>
+                </ListItem>
+              ) : null}
+
+              {websiteUrl && websiteDisplayText ? (
+                <ListItem>
+                  <HStack spacing={2} align="center">
+                    <InfoIcon>
+                      <Globe size={18} />
+                    </InfoIcon>
+                    <Link
+                      href={websiteUrl}
+                      isExternal
+                      rel="noopener noreferrer"
+                      color="brand.accent"
+                      wordBreak="break-all"
+                    >
+                      {websiteDisplayText}
+                    </Link>
+                  </HStack>
+                </ListItem>
+              ) : null}
+
+              {twitterUrl && twitterUsername ? (
+                <ListItem>
+                  <HStack spacing={2} align="center">
+                    <InfoIcon>
+                      <AtSign size={18} />
+                    </InfoIcon>
+                    <Link
+                      href={twitterUrl}
+                      isExternal
+                      rel="noopener noreferrer"
+                      color="brand.accent"
+                    >
+                      @{twitterUsername}
+                    </Link>
+                  </HStack>
+                </ListItem>
+              ) : null}
+            </List>
+          </Box>
         </Stack>
       </CardBody>
     </Card>

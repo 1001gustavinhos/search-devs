@@ -3,13 +3,17 @@ import type { FormEvent } from "react";
 import {
   Alert,
   AlertIcon,
+  Box,
   Button,
   Heading,
   HStack,
   Input,
+  InputGroup,
+  InputLeftElement,
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { Search } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import {
@@ -66,37 +70,79 @@ export function HomePage() {
       justify="center"
       align="stretch"
     >
-      <Heading as="h1" size="2xl" textAlign="center" letterSpacing="tight">
+      <Heading
+        as="h1"
+        textAlign="center"
+        letterSpacing="tight"
+        fontSize={{ base: "50px", md: "6xl" }}
+        lineHeight="1"
+        fontWeight="medium"
+      >
         <Text
           as="span"
           color="brand.searchBlue"
           fontFamily="'Nunito', sans-serif"
+          fontWeight="medium"
         >
           Search
         </Text>{" "}
-        <Text as="span" color="brand.title" fontFamily="'Nunito', sans-serif">
-          d_evs
+        <Text
+          as="span"
+          color="brand.accent"
+          fontFamily="'Nunito', sans-serif"
+          fontWeight="medium"
+        >
+          d
+        </Text>
+        <Text
+          as="span"
+          color="brand.accent"
+          fontFamily="'Nunito', sans-serif"
+          fontWeight="bold"
+        >
+          _
+        </Text>
+        <Text
+          as="span"
+          color="brand.accent"
+          fontFamily="'Nunito', sans-serif"
+          fontWeight="medium"
+        >
+          evs
         </Text>
       </Heading>
 
       <HStack spacing={3} align="stretch">
-        <Input
-          value={username}
-          onChange={(event) => {
-            setUsername(event.target.value);
-            if (errorMessage) {
-              setErrorMessage("");
-            }
-          }}
-          placeholder={t("home.searchPlaceholder")}
-          size="lg"
-          bg="brand.surface"
-          flex="1"
-        />
+        <InputGroup flex="1">
+          <InputLeftElement pointerEvents="none" color="brand.accent">
+            <Box
+              boxSize="24px"
+              display="inline-flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Search size={18} />
+            </Box>
+          </InputLeftElement>
+
+          <Input
+            value={username}
+            onChange={(event) => {
+              setUsername(event.target.value);
+              if (errorMessage) {
+                setErrorMessage("");
+              }
+            }}
+            placeholder={t("home.searchPlaceholder")}
+            size="lg"
+            bg="brand.surface"
+          />
+        </InputGroup>
 
         <Button
           type="submit"
           size="lg"
+          display={{ base: "none", md: "inline-flex" }}
           isDisabled={!username.trim() || isSubmitting}
           isLoading={isSubmitting}
           loadingText={t("home.loading")}

@@ -1,22 +1,29 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { FormEvent } from "react";
+import type { FormEvent, ReactNode } from "react";
 import {
   Alert,
   AlertIcon,
   Box,
   Button,
-  FormControl,
-  FormLabel,
+  IconButton,
   Heading,
   HStack,
   Input,
   Link,
-  Select,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Spinner,
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { Clock3, Star } from "lucide-react";
+import {
+  ArrowDownWideNarrow,
+  ArrowUpWideNarrow,
+  Clock3,
+  Star,
+} from "lucide-react";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { UserProfileCard } from "../components/user-profile-card.tsx";
@@ -65,6 +72,20 @@ function formatTimeSinceLastUpdate(updatedAt: string, language: string) {
 
   const diffInYears = Math.round(diffInMonths / 12);
   return formatter.format(diffInYears, "year");
+}
+
+function InfoIcon({ children }: { children: ReactNode }) {
+  return (
+    <Box
+      boxSize="24px"
+      display="inline-flex"
+      alignItems="center"
+      justifyContent="center"
+      flexShrink={0}
+    >
+      {children}
+    </Box>
+  );
 }
 
 export function ProfilePage() {
@@ -290,7 +311,7 @@ export function ProfilePage() {
       <HStack
         as="form"
         onSubmit={handleSearchSubmit}
-        spacing={3}
+        spacing={0}
         align="stretch"
       >
         <Input
@@ -303,15 +324,6 @@ export function ProfilePage() {
           bg="brand.surface"
           flex="1"
         />
-
-        <Button
-          type="submit"
-          isDisabled={
-            !searchUsername.trim() || searchUsername.trim() === username
-          }
-        >
-          {t("home.searchButton")}
-        </Button>
       </HStack>
 
       <UserProfileCard user={user} />
@@ -339,43 +351,78 @@ export function ProfilePage() {
           </Heading>
 
           <HStack spacing={3}>
-            <FormControl minW="180px">
-              <FormLabel mb={1} fontSize="sm">
+            <Menu>
+              <MenuButton
+                as={Button}
+                type="button"
+                size="sm"
+                variant="outline"
+                minW="220px"
+                textAlign="left"
+              >
                 {t("profile.repositoriesSortLabel")}
-              </FormLabel>
-              <Select
-                size="sm"
-                bg="white"
-                value={repositorySort}
-                onChange={(event) => {
-                  setRepositorySort(event.target.value as GithubRepoSort);
-                }}
-              >
-                <option value="created">{t("profile.sortCreated")}</option>
-                <option value="updated">{t("profile.sortUpdated")}</option>
-                <option value="pushed">{t("profile.sortPushed")}</option>
-                <option value="full_name">{t("profile.sortFullName")}</option>
-              </Select>
-            </FormControl>
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  fontWeight={repositorySort === "created" ? "semibold" : "normal"}
+                  onClick={() => {
+                    setRepositorySort("created");
+                  }}
+                >
+                  {t("profile.sortCreated")}
+                </MenuItem>
+                <MenuItem
+                  fontWeight={repositorySort === "updated" ? "semibold" : "normal"}
+                  onClick={() => {
+                    setRepositorySort("updated");
+                  }}
+                >
+                  {t("profile.sortUpdated")}
+                </MenuItem>
+                <MenuItem
+                  fontWeight={repositorySort === "pushed" ? "semibold" : "normal"}
+                  onClick={() => {
+                    setRepositorySort("pushed");
+                  }}
+                >
+                  {t("profile.sortPushed")}
+                </MenuItem>
+                <MenuItem
+                  fontWeight={repositorySort === "full_name" ? "semibold" : "normal"}
+                  onClick={() => {
+                    setRepositorySort("full_name");
+                  }}
+                >
+                  {t("profile.sortFullName")}
+                </MenuItem>
+              </MenuList>
+            </Menu>
 
-            <FormControl minW="140px">
-              <FormLabel mb={1} fontSize="sm">
-                {t("profile.repositoriesDirectionLabel")}
-              </FormLabel>
-              <Select
-                size="sm"
-                bg="white"
-                value={repositoryDirection}
-                onChange={(event) => {
-                  setRepositoryDirection(
-                    event.target.value as GithubRepoDirection,
-                  );
-                }}
-              >
-                <option value="desc">{t("profile.directionDesc")}</option>
-                <option value="asc">{t("profile.directionAsc")}</option>
-              </Select>
-            </FormControl>
+            <IconButton
+              type="button"
+              size="sm"
+              variant="outline"
+              icon={
+                repositoryDirection === "asc" ? (
+                  <ArrowUpWideNarrow size={18} />
+                ) : (
+                  <ArrowDownWideNarrow size={18} />
+                )
+              }
+              boxSize="32px"
+              minW="32px"
+              minH="32px"
+              onClick={() => {
+                setRepositoryDirection((previousDirection) =>
+                  previousDirection === "asc" ? "desc" : "asc",
+                );
+              }}
+              aria-label={`${t("profile.repositoriesDirectionLabel")}: ${
+                repositoryDirection === "asc"
+                  ? t("profile.directionAsc")
+                  : t("profile.directionDesc")
+              }`}
+            />
           </HStack>
         </HStack>
 
@@ -430,14 +477,18 @@ export function ProfilePage() {
                 flexWrap="wrap"
               >
                 <HStack spacing={1}>
-                  <Star size={14} />
+                  <InfoIcon>
+                    <Star size={18} />
+                  </InfoIcon>
                   <Text>{repository.stargazers_count}</Text>
                 </HStack>
 
                 <Text aria-hidden="true">•</Text>
 
                 <HStack spacing={1}>
-                  <Clock3 size={14} />
+                  <InfoIcon>
+                    <Clock3 size={18} />
+                  </InfoIcon>
                   <Text>
                     {`${t("profile.updatedPrefix")} ${formatTimeSinceLastUpdate(
                       repository.updated_at,
