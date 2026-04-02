@@ -95,5 +95,18 @@ export const theme = extendTheme({
         focusBorderColor: "brand.accent",
       },
     },
+    Link: {
+      baseStyle: {
+        color: "brand.text",
+        textDecoration: "none",
+        _hover: {
+          color: "brand.accent",
+          textDecoration: "none",
+        },
+        _focusVisible: {
+          textDecoration: "none",
+        },
+      },
+    },
   },
 });

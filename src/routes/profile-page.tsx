@@ -6,7 +6,6 @@ import {
   Box,
   Button,
   IconButton,
-  Heading,
   HStack,
   Input,
   Link,
@@ -334,182 +333,199 @@ export function ProfilePage() {
         href={user.html_url}
         isExternal
         rel="noopener noreferrer"
+        display={{ base: "none", md: "inline-flex" }}
         alignSelf={{ base: "stretch", md: "flex-start" }}
       >
         {t("profile.contactButton")}
       </Button>
 
-      <VStack align="stretch" spacing={4}>
-        <HStack
-          justify="space-between"
-          align={{ base: "stretch", md: "end" }}
-          flexDir={{ base: "column", md: "row" }}
-          spacing={4}
-        >
-          <Heading as="h3" size="md" color="brand.title">
-            {t("profile.repositoriesTitle")}
-          </Heading>
+      <Box bg="brand.surface" borderRadius="4px" p={3} shadow="md">
+        <VStack align="stretch" spacing={4}>
+          <HStack justify="flex-end" align="center" spacing={4}>
+            <HStack spacing={3} w="100%" justify="flex-end">
+              <Menu>
+                <MenuButton
+                  as={Button}
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  minW="220px"
+                  textAlign="left"
+                >
+                  {t("profile.repositoriesSortLabel")}
+                </MenuButton>
+                <MenuList>
+                  <MenuItem
+                    fontWeight={
+                      repositorySort === "created" ? "semibold" : "normal"
+                    }
+                    onClick={() => {
+                      setRepositorySort("created");
+                    }}
+                  >
+                    {t("profile.sortCreated")}
+                  </MenuItem>
+                  <MenuItem
+                    fontWeight={
+                      repositorySort === "updated" ? "semibold" : "normal"
+                    }
+                    onClick={() => {
+                      setRepositorySort("updated");
+                    }}
+                  >
+                    {t("profile.sortUpdated")}
+                  </MenuItem>
+                  <MenuItem
+                    fontWeight={
+                      repositorySort === "pushed" ? "semibold" : "normal"
+                    }
+                    onClick={() => {
+                      setRepositorySort("pushed");
+                    }}
+                  >
+                    {t("profile.sortPushed")}
+                  </MenuItem>
+                  <MenuItem
+                    fontWeight={
+                      repositorySort === "full_name" ? "semibold" : "normal"
+                    }
+                    onClick={() => {
+                      setRepositorySort("full_name");
+                    }}
+                  >
+                    {t("profile.sortFullName")}
+                  </MenuItem>
+                </MenuList>
+              </Menu>
 
-          <HStack spacing={3}>
-            <Menu>
-              <MenuButton
-                as={Button}
+              <IconButton
                 type="button"
                 size="sm"
                 variant="outline"
-                minW="220px"
-                textAlign="left"
-              >
-                {t("profile.repositoriesSortLabel")}
-              </MenuButton>
-              <MenuList>
-                <MenuItem
-                  fontWeight={repositorySort === "created" ? "semibold" : "normal"}
-                  onClick={() => {
-                    setRepositorySort("created");
-                  }}
-                >
-                  {t("profile.sortCreated")}
-                </MenuItem>
-                <MenuItem
-                  fontWeight={repositorySort === "updated" ? "semibold" : "normal"}
-                  onClick={() => {
-                    setRepositorySort("updated");
-                  }}
-                >
-                  {t("profile.sortUpdated")}
-                </MenuItem>
-                <MenuItem
-                  fontWeight={repositorySort === "pushed" ? "semibold" : "normal"}
-                  onClick={() => {
-                    setRepositorySort("pushed");
-                  }}
-                >
-                  {t("profile.sortPushed")}
-                </MenuItem>
-                <MenuItem
-                  fontWeight={repositorySort === "full_name" ? "semibold" : "normal"}
-                  onClick={() => {
-                    setRepositorySort("full_name");
-                  }}
-                >
-                  {t("profile.sortFullName")}
-                </MenuItem>
-              </MenuList>
-            </Menu>
-
-            <IconButton
-              type="button"
-              size="sm"
-              variant="outline"
-              icon={
-                repositoryDirection === "asc" ? (
-                  <ArrowUpWideNarrow size={18} />
-                ) : (
-                  <ArrowDownWideNarrow size={18} />
-                )
-              }
-              boxSize="32px"
-              minW="32px"
-              minH="32px"
-              onClick={() => {
-                setRepositoryDirection((previousDirection) =>
-                  previousDirection === "asc" ? "desc" : "asc",
-                );
-              }}
-              aria-label={`${t("profile.repositoriesDirectionLabel")}: ${
-                repositoryDirection === "asc"
-                  ? t("profile.directionAsc")
-                  : t("profile.directionDesc")
-              }`}
-            />
+                icon={
+                  repositoryDirection === "asc" ? (
+                    <ArrowUpWideNarrow size={18} />
+                  ) : (
+                    <ArrowDownWideNarrow size={18} />
+                  )
+                }
+                boxSize="32px"
+                minW="32px"
+                minH="32px"
+                onClick={() => {
+                  setRepositoryDirection((previousDirection) =>
+                    previousDirection === "asc" ? "desc" : "asc",
+                  );
+                }}
+                aria-label={`${t("profile.repositoriesDirectionLabel")}: ${
+                  repositoryDirection === "asc"
+                    ? t("profile.directionAsc")
+                    : t("profile.directionDesc")
+                }`}
+              />
+            </HStack>
           </HStack>
-        </HStack>
 
-        {isLoadingRepositories ? (
-          <HStack spacing={3}>
-            <Spinner size="sm" color="brand.accent" />
-            <Text>{t("profile.repositoriesLoading")}</Text>
-          </HStack>
-        ) : null}
+          {isLoadingRepositories ? (
+            <HStack spacing={3}>
+              <Spinner size="sm" color="brand.accent" />
+              <Text fontSize="14px">{t("profile.repositoriesLoading")}</Text>
+            </HStack>
+          ) : null}
 
-        {repositoriesErrorMessage ? (
-          <Alert status="error" borderRadius="md">
-            <AlertIcon />
-            {repositoriesErrorMessage}
-          </Alert>
-        ) : null}
+          {repositoriesErrorMessage ? (
+            <Alert status="error" borderRadius="md">
+              <AlertIcon />
+              {repositoriesErrorMessage}
+            </Alert>
+          ) : null}
 
-        {!isLoadingRepositories &&
-        !repositoriesErrorMessage &&
-        repositories.length === 0 ? (
-          <Text color="brand.text">{t("profile.noRepositories")}</Text>
-        ) : null}
+          {!isLoadingRepositories &&
+          !repositoriesErrorMessage &&
+          repositories.length === 0 ? (
+            <Text color="brand.text" fontSize="14px">
+              {t("profile.noRepositories")}
+            </Text>
+          ) : null}
 
-        <VStack align="stretch" spacing={3}>
-          {repositories.map((repository) => (
-            <Box
-              key={repository.id}
-              borderWidth="1px"
-              borderColor="gray.200"
-              borderRadius="4px"
-              p={4}
-              bg="brand.surface"
-            >
-              <Link
-                href={repository.html_url}
-                isExternal
-                fontWeight="semibold"
-                color="brand.title"
+          <VStack align="stretch" spacing={0}>
+            {repositories.map((repository, index) => (
+              <Box
+                key={repository.id}
+                borderRadius="4px"
+                px={{ base: 0, md: 3 }}
+                py={3}
+                bg="brand.surface"
+                boxShadow={
+                  index < repositories.length - 1
+                    ? "0 14px 20px -16px rgba(23, 25, 35, 0.6)"
+                    : "none"
+                }
               >
-                {repository.name}
-              </Link>
-              <Text mt={2} color="brand.text" fontSize="sm">
-                {repository.description ??
-                  t("profile.repositoryWithoutDescription")}
+                <Link
+                  href={repository.html_url}
+                  isExternal
+                  fontWeight="bold"
+                  fontSize="20px"
+                >
+                  {repository.name}
+                </Link>
+                <Text
+                  mt={2}
+                  color="brand.text"
+                  fontSize="16px"
+                  fontWeight="normal"
+                >
+                  {repository.description ??
+                    t("profile.repositoryWithoutDescription")}
+                </Text>
+
+                <HStack
+                  mt={3}
+                  spacing={2}
+                  color="brand.text"
+                  fontSize="14px"
+                  flexWrap="wrap"
+                >
+                  <HStack spacing={1}>
+                    <InfoIcon>
+                      <Star size={18} />
+                    </InfoIcon>
+                    <Text>{repository.stargazers_count}</Text>
+                  </HStack>
+
+                  <Text aria-hidden="true">•</Text>
+
+                  <HStack spacing={1}>
+                    <InfoIcon>
+                      <Clock3 size={18} />
+                    </InfoIcon>
+                    <Text>
+                      {`${t("profile.updatedPrefix")} ${formatTimeSinceLastUpdate(
+                        repository.updated_at,
+                        i18n.language,
+                      )}`}
+                    </Text>
+                  </HStack>
+                </HStack>
+              </Box>
+            ))}
+          </VStack>
+
+          {hasMoreRepositories ? (
+            <Box ref={loadMoreTriggerRef} h="1px" />
+          ) : null}
+
+          {isLoadingMoreRepositories ? (
+            <HStack spacing={3}>
+              <Spinner size="sm" color="brand.accent" />
+              <Text fontSize="14px">
+                {t("profile.repositoriesLoadingMore")}
               </Text>
-
-              <HStack
-                mt={3}
-                spacing={2}
-                color="brand.text"
-                fontSize="sm"
-                flexWrap="wrap"
-              >
-                <HStack spacing={1}>
-                  <InfoIcon>
-                    <Star size={18} />
-                  </InfoIcon>
-                  <Text>{repository.stargazers_count}</Text>
-                </HStack>
-
-                <Text aria-hidden="true">•</Text>
-
-                <HStack spacing={1}>
-                  <InfoIcon>
-                    <Clock3 size={18} />
-                  </InfoIcon>
-                  <Text>
-                    {`${t("profile.updatedPrefix")} ${formatTimeSinceLastUpdate(
-                      repository.updated_at,
-                      i18n.language,
-                    )}`}
-                  </Text>
-                </HStack>
-              </HStack>
-            </Box>
-          ))}
+            </HStack>
+          ) : null}
         </VStack>
-
-        {hasMoreRepositories ? <Box ref={loadMoreTriggerRef} h="1px" /> : null}
-
-        {isLoadingMoreRepositories ? (
-          <HStack spacing={3}>
-            <Spinner size="sm" color="brand.accent" />
-            <Text>{t("profile.repositoriesLoadingMore")}</Text>
-          </HStack>
-        ) : null}
-      </VStack>
+      </Box>
     </VStack>
   );
 }

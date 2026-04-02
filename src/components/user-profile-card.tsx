@@ -119,32 +119,35 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
     >
       <CardBody>
         <Stack spacing={4}>
-          <HStack spacing={4} align="flex-start">
+          <HStack spacing={4} align="center">
             <Avatar
-              size="xl"
+              boxSize="48px"
               name={displayName}
               src={user.avatar_url}
               bg="brand.accent"
             />
 
-            <Stack spacing={1} minW={0}>
+            <Stack spacing={0} minW={0} justify="center">
               <Link
                 href={user.html_url}
                 isExternal
                 rel="noopener noreferrer"
-                fontWeight="semibold"
-                color="brand.title"
+                fontWeight="bold"
+                fontSize="20px"
                 wordBreak="break-word"
               >
                 {displayName}
               </Link>
-              <Text color={{ base: "brand.text", md: "brand.usernameDesktop" }}>
+              <Text
+                color={{ base: "brand.text", md: "brand.usernameDesktop" }}
+                fontSize="14px"
+              >
                 @{user.login}
               </Text>
             </Stack>
           </HStack>
 
-          <Box display={{ base: "block", md: "none" }}>
+          <Box display={{ base: "block", md: "none" }} fontSize="14px">
             <HStack spacing={6} align="center" flexWrap="wrap">
               <HStack spacing={1}>
                 <InfoIcon>
@@ -166,12 +169,17 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
             </HStack>
 
             {normalizedBio ? (
-              <Text mt={3} color="brand.text">
+              <Text
+                mt={3}
+                color="brand.text"
+                fontSize="16px"
+                fontWeight="normal"
+              >
                 {normalizedBio}
               </Text>
             ) : null}
 
-            <Wrap mt={3} spacing={3} color="brand.text">
+            <Wrap mt={3} spacing={3} color="brand.text" fontSize="14px">
               {user.company !== null ? (
                 <WrapItem>
                   <HStack spacing={2} align="center">
@@ -200,10 +208,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
                     <InfoIcon>
                       <Mail size={18} />
                     </InfoIcon>
-                    <Link
-                      href={`mailto:${normalizedEmail}`}
-                      color="brand.accent"
-                    >
+                    <Link href={`mailto:${normalizedEmail}`}>
                       {normalizedEmail}
                     </Link>
                   </HStack>
@@ -220,7 +225,6 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
                       href={websiteUrl}
                       isExternal
                       rel="noopener noreferrer"
-                      color="brand.text"
                       wordBreak="break-all"
                     >
                       {websiteDisplayText}
@@ -239,7 +243,6 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
                       href={twitterUrl}
                       isExternal
                       rel="noopener noreferrer"
-                      color="brand.accent"
                     >
                       @{twitterUsername}
                     </Link>
@@ -249,10 +252,19 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
             </Wrap>
           </Box>
 
-          <Box display={{ base: "none", md: "block" }}>
-            {normalizedBio ? <Text>{normalizedBio}</Text> : null}
+          <Box display={{ base: "none", md: "block" }} fontSize="14px">
+            {normalizedBio ? (
+              <Text fontSize="16px" fontWeight="normal">
+                {normalizedBio}
+              </Text>
+            ) : null}
 
-            <List spacing={2} color="brand.text" mt={normalizedBio ? 3 : 0}>
+            <List
+              spacing={2}
+              color="brand.text"
+              mt={normalizedBio ? 3 : 0}
+              fontSize="14px"
+            >
               <ListItem>
                 <HStack spacing={2} align="center">
                   <InfoIcon>
@@ -303,10 +315,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
                     <InfoIcon>
                       <Mail size={18} />
                     </InfoIcon>
-                    <Link
-                      href={`mailto:${normalizedEmail}`}
-                      color="brand.accent"
-                    >
+                    <Link href={`mailto:${normalizedEmail}`}>
                       {normalizedEmail}
                     </Link>
                   </HStack>
@@ -323,7 +332,6 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
                       href={websiteUrl}
                       isExternal
                       rel="noopener noreferrer"
-                      color="brand.accent"
                       wordBreak="break-all"
                     >
                       {websiteDisplayText}
@@ -342,7 +350,6 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
                       href={twitterUrl}
                       isExternal
                       rel="noopener noreferrer"
-                      color="brand.accent"
                     >
                       @{twitterUsername}
                     </Link>
