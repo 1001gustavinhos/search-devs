@@ -60,7 +60,8 @@ export function ProfilePage() {
   const [repositoriesErrorMessage, setRepositoriesErrorMessage] = useState("");
   const [hasMoreRepositories, setHasMoreRepositories] = useState(false);
   const [currentRepositoryPage, setCurrentRepositoryPage] = useState(1);
-  const [repositorySort, setRepositorySort] = useState<GithubRepoSort>("updated");
+  const [repositorySort, setRepositorySort] =
+    useState<GithubRepoSort>("updated");
   const [repositoryDirection, setRepositoryDirection] =
     useState<GithubRepoDirection>("desc");
   const loadMoreTriggerRef = useRef<HTMLDivElement | null>(null);
@@ -322,7 +323,12 @@ export function ProfilePage() {
       </HStack>
 
       <VStack align="stretch" spacing={4}>
-        <HStack justify="space-between" align={{ base: "stretch", md: "end" }} flexDir={{ base: "column", md: "row" }} spacing={4}>
+        <HStack
+          justify="space-between"
+          align={{ base: "stretch", md: "end" }}
+          flexDir={{ base: "column", md: "row" }}
+          spacing={4}
+        >
           <Heading as="h3" size="md">
             {t("profile.repositoriesTitle")}
           </Heading>
@@ -356,7 +362,9 @@ export function ProfilePage() {
                 bg="white"
                 value={repositoryDirection}
                 onChange={(event) => {
-                  setRepositoryDirection(event.target.value as GithubRepoDirection);
+                  setRepositoryDirection(
+                    event.target.value as GithubRepoDirection,
+                  );
                 }}
               >
                 <option value="desc">{t("profile.directionDesc")}</option>
