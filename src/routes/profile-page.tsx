@@ -21,6 +21,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import {
+  ArrowUpDown,
   ArrowDownWideNarrow,
   ArrowUpWideNarrow,
   Clock3,
@@ -312,37 +313,49 @@ export function ProfilePage() {
 
   return (
     <VStack align="stretch" spacing={6} maxW="1200px" mx="auto" w="100%">
-      <HStack
+      <Stack
         as="form"
         onSubmit={handleSearchSubmit}
-        spacing={4}
+        direction={{ base: "column", md: "row" }}
+        spacing={{ base: 6, md: 8 }}
         align="center"
-        justify="space-between"
+        w="100%"
         display={{ base: "none", md: "flex" }}
       >
-        <Link href="/" textDecoration="none" _hover={{ textDecoration: "none" }}>
-          <SearchWordmark fontSize="32px" textAlign="left" />
-        </Link>
+        <Box w={{ base: "100%", md: "280px" }} flexShrink={0}>
+          <Link
+            href="/"
+            textDecoration="none"
+            _hover={{ textDecoration: "none" }}
+          >
+            <SearchWordmark fontSize="32px" textAlign="left" />
+          </Link>
+        </Box>
 
-        <InputGroup flex="1" maxW="590px">
-          <InputLeftElement pointerEvents="none" color="brand.usernameDesktop">
-            <Search size={18} />
-          </InputLeftElement>
-          <Input
-            value={searchUsername}
-            onChange={(event) => {
-              setSearchUsername(event.target.value);
-            }}
-            placeholder={username}
-            size="md"
-            bg="brand.surface"
-            textAlign="left"
-            _placeholder={{
-              color: "brand.usernameDesktop",
-            }}
-          />
-        </InputGroup>
-      </HStack>
+        <HStack justify="flex-start" w="100%" flex="1">
+          <InputGroup flex="1" maxW="590px">
+            <InputLeftElement
+              pointerEvents="none"
+              color="brand.usernameDesktop"
+            >
+              <Search size={18} />
+            </InputLeftElement>
+            <Input
+              value={searchUsername}
+              onChange={(event) => {
+                setSearchUsername(event.target.value);
+              }}
+              placeholder={username}
+              size="md"
+              bg="brand.surface"
+              textAlign="left"
+              _placeholder={{
+                color: "brand.usernameDesktop",
+              }}
+            />
+          </InputGroup>
+        </HStack>
+      </Stack>
 
       <Stack
         direction={{ base: "column", md: "row" }}
@@ -398,6 +411,8 @@ export function ProfilePage() {
                     type="button"
                     size="sm"
                     variant="outline"
+                    borderColor="gray.200"
+                    leftIcon={<ArrowUpDown size={18} />}
                     minW="220px"
                     textAlign="left"
                   >
@@ -451,6 +466,7 @@ export function ProfilePage() {
                   type="button"
                   size="sm"
                   variant="outline"
+                  borderColor="gray.200"
                   icon={
                     repositoryDirection === "asc" ? (
                       <ArrowUpWideNarrow size={18} />
@@ -507,9 +523,7 @@ export function ProfilePage() {
                   bg="brand.surface"
                   borderBottomWidth="1px"
                   borderBottomColor="gray.100"
-                  boxShadow={
-                    "none"
-                  }
+                  boxShadow={"none"}
                 >
                   <Link
                     href={repository.html_url}

@@ -61,7 +61,7 @@ export function HomePage() {
     <VStack
       as="form"
       onSubmit={handleSubmit}
-      spacing={4}
+      spacing={12}
       maxW="560px"
       w="100%"
       mx="auto"
@@ -73,7 +73,13 @@ export function HomePage() {
 
       <HStack spacing={3} align="stretch">
         <InputGroup flex="1">
-          <InputLeftElement pointerEvents="none" color="brand.accent">
+          <InputLeftElement
+            pointerEvents="none"
+            color="brand.text"
+            h="100%"
+            display="flex"
+            alignItems="center"
+          >
             <Box
               boxSize="24px"
               display="inline-flex"
