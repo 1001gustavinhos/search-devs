@@ -123,3 +123,5 @@ npm run lint
 - Octokit foi usado para comunicação com a API do GitHub.
 - Zod foi usado para validar os formatos de usuário e repositório.
 - A marca `Search d_evs` foi extraída para um componente compartilhado para manter consistência entre telas.
+- Os ícones foram implementados com `lucide-react` em vez dos ícones do Figma por falta de acesso ao MyIcons no momento da implementação.
+- Sei que é possível exportar os ícones diretamente do Figma, mas a escolha pelo Lucide foi intencional para manter padrão visual e velocidade de desenvolvimento durante o desafio.
