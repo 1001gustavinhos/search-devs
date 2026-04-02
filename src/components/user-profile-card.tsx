@@ -14,9 +14,9 @@ import {
 } from "@chakra-ui/react";
 import type { ReactNode } from "react";
 import {
-  AtSign,
+  Bird,
   Building2,
-  Globe,
+  LinkIcon,
   Mail,
   MapPin,
   UserPlus,
@@ -226,7 +226,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
                 <WrapItem>
                   <HStack spacing={1} align="center">
                     <InfoIcon>
-                      <Globe size={18} />
+                      <LinkIcon size={18} />
                     </InfoIcon>
                     <Link
                       href={websiteUrl}
@@ -244,7 +244,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
                 <WrapItem>
                   <HStack spacing={1} align="center">
                     <InfoIcon>
-                      <AtSign size={18} />
+                      <Bird size={18} />
                     </InfoIcon>
                     <Link
                       href={twitterUrl}
@@ -338,7 +338,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
                 <ListItem>
                   <HStack spacing={1} align="center">
                     <InfoIcon>
-                      <Globe size={18} />
+                      <LinkIcon size={18} />
                     </InfoIcon>
                     <Link
                       href={websiteUrl}
@@ -356,7 +356,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
                 <ListItem>
                   <HStack spacing={1} align="center">
                     <InfoIcon>
-                      <AtSign size={18} />
+                      <Bird size={18} />
                     </InfoIcon>
                     <Link
                       href={twitterUrl}
