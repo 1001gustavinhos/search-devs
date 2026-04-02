@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { FormEvent, ReactNode } from "react";
+import type { ReactNode, SyntheticEvent } from "react";
 import {
   Alert,
   AlertIcon,
@@ -120,7 +120,7 @@ export function ProfilePage() {
     setSearchUsername("");
   }, [username]);
 
-  const handleSearchSubmit = async (event: FormEvent<HTMLDivElement>) => {
+  const handleSearchSubmit = async (event: SyntheticEvent<HTMLDivElement>) => {
     event.preventDefault();
 
     const trimmedUsername = searchUsername.trim();
