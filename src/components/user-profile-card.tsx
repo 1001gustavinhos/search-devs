@@ -149,7 +149,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
 
           <Box display={{ base: "block", md: "none" }} fontSize="14px">
             <HStack spacing={6} align="center" flexWrap="wrap">
-              <HStack spacing={1}>
+              <HStack spacing={1} color="brand.text">
                 <InfoIcon>
                   <Users size={18} />
                 </InfoIcon>
@@ -158,7 +158,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
                 </Text>
               </HStack>
 
-              <HStack spacing={1}>
+              <HStack spacing={1} color="brand.text">
                 <InfoIcon>
                   <UserPlus size={18} />
                 </InfoIcon>
@@ -170,7 +170,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
 
             {normalizedBio ? (
               <Text
-                mt={3}
+                my={5}
                 color="brand.text"
                 fontSize="16px"
                 fontWeight="normal"
@@ -179,10 +179,16 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
               </Text>
             ) : null}
 
-            <Wrap mt={3} spacing={3} color="brand.text" fontSize="14px">
+            <Wrap
+              mt={3}
+              spacing={3}
+              color="brand.text"
+              fontSize="14px"
+              justify="center"
+            >
               {user.company !== null ? (
                 <WrapItem>
-                  <HStack spacing={2} align="center">
+                  <HStack spacing={1} align="center">
                     <InfoIcon>
                       <Building2 size={18} />
                     </InfoIcon>
@@ -193,7 +199,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
 
               {normalizedLocation ? (
                 <WrapItem>
-                  <HStack spacing={2} align="center">
+                  <HStack spacing={1} align="center">
                     <InfoIcon>
                       <MapPin size={18} />
                     </InfoIcon>
@@ -204,7 +210,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
 
               {normalizedEmail ? (
                 <WrapItem>
-                  <HStack spacing={2} align="center">
+                  <HStack spacing={1} align="center">
                     <InfoIcon>
                       <Mail size={18} />
                     </InfoIcon>
@@ -217,7 +223,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
 
               {websiteUrl && websiteDisplayText ? (
                 <WrapItem>
-                  <HStack spacing={2} align="center">
+                  <HStack spacing={1} align="center">
                     <InfoIcon>
                       <Globe size={18} />
                     </InfoIcon>
@@ -235,7 +241,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
 
               {twitterUrl && twitterUsername ? (
                 <WrapItem>
-                  <HStack spacing={2} align="center">
+                  <HStack spacing={1} align="center">
                     <InfoIcon>
                       <AtSign size={18} />
                     </InfoIcon>
@@ -254,7 +260,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
 
           <Box display={{ base: "none", md: "block" }} fontSize="14px">
             {normalizedBio ? (
-              <Text fontSize="16px" fontWeight="normal">
+              <Text my={3} fontSize="16px" fontWeight="normal">
                 {normalizedBio}
               </Text>
             ) : null}
@@ -266,7 +272,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
               fontSize="14px"
             >
               <ListItem>
-                <HStack spacing={2} align="center">
+                <HStack spacing={1} align="center">
                   <InfoIcon>
                     <Users size={18} />
                   </InfoIcon>
@@ -277,7 +283,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
               </ListItem>
 
               <ListItem>
-                <HStack spacing={2} align="center">
+                <HStack spacing={1} align="center">
                   <InfoIcon>
                     <UserPlus size={18} />
                   </InfoIcon>
@@ -289,7 +295,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
 
               {user.company !== null ? (
                 <ListItem>
-                  <HStack spacing={2} align="center">
+                  <HStack spacing={1} align="center">
                     <InfoIcon>
                       <Building2 size={18} />
                     </InfoIcon>
@@ -300,7 +306,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
 
               {normalizedLocation ? (
                 <ListItem>
-                  <HStack spacing={2} align="center">
+                  <HStack spacing={1} align="center">
                     <InfoIcon>
                       <MapPin size={18} />
                     </InfoIcon>
@@ -311,7 +317,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
 
               {normalizedEmail ? (
                 <ListItem>
-                  <HStack spacing={2} align="center">
+                  <HStack spacing={1} align="center">
                     <InfoIcon>
                       <Mail size={18} />
                     </InfoIcon>
@@ -324,7 +330,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
 
               {websiteUrl && websiteDisplayText ? (
                 <ListItem>
-                  <HStack spacing={2} align="center">
+                  <HStack spacing={1} align="center">
                     <InfoIcon>
                       <Globe size={18} />
                     </InfoIcon>
@@ -342,7 +348,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
 
               {twitterUrl && twitterUsername ? (
                 <ListItem>
-                  <HStack spacing={2} align="center">
+                  <HStack spacing={1} align="center">
                     <InfoIcon>
                       <AtSign size={18} />
                     </InfoIcon>
