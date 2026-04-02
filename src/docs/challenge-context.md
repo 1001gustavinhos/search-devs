@@ -70,7 +70,7 @@ Build a React application that searches GitHub users and displays their reposito
 
 ## Suggested Commit Strategy
 
-1. chore: setup providers, router baseline, and core dependencies (octokit and lucide-react)
+1. chore: setup providers, router baseline, and core dependencies
 2. feat: implement home search flow with octokit
 3. feat: implement profile user data and error states
 4. feat: implement repository infinite scroll

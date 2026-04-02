@@ -9,6 +9,10 @@ const resources = {
         description: "Busque um usuario do GitHub para abrir o perfil.",
         searchPlaceholder: "Digite o username do GitHub",
         searchButton: "Buscar",
+        loading: "Buscando",
+        userNotFound: "Nao ha usuarios com esse nome",
+        genericError:
+          "Nao foi possivel consultar o GitHub agora. Tente novamente.",
       },
       profile: {
         title: "Perfil de {{username}}",
@@ -24,6 +28,9 @@ const resources = {
         description: "Search for a GitHub user to open the profile.",
         searchPlaceholder: "Type the GitHub username",
         searchButton: "Search",
+        loading: "Searching",
+        userNotFound: "No users found with this name",
+        genericError: "Could not reach GitHub right now. Please try again.",
       },
       profile: {
         title: "Profile: {{username}}",
