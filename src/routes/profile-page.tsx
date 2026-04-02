@@ -341,7 +341,7 @@ export function ProfilePage() {
             {t("profile.repositoriesTitle")}
           </Heading>
 
-          <HStack spacing={3} flexWrap="wrap">
+          <HStack spacing={3}>
             <FormControl minW="180px">
               <FormLabel mb={1} fontSize="sm">
                 {t("profile.repositoriesSortLabel")}
@@ -427,7 +427,7 @@ export function ProfilePage() {
 
               <HStack
                 mt={3}
-                spacing={4}
+                spacing={2}
                 color="gray.600"
                 fontSize="sm"
                 flexWrap="wrap"
@@ -436,6 +436,8 @@ export function ProfilePage() {
                   <Star size={14} />
                   <Text>{repository.stargazers_count}</Text>
                 </HStack>
+
+                <Text aria-hidden="true">•</Text>
 
                 <HStack spacing={1}>
                   <Clock3 size={14} />
