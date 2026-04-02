@@ -95,7 +95,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
   const twitterUrl = getTwitterProfileUrl(user.twitter_username);
 
   return (
-    <Card bg="white" shadow="sm">
+    <Card bg={{ base: "brand.mobileProfileCardBg", md: "brand.surface" }} shadow="sm">
       <CardBody>
         <Stack spacing={4}>
           <HStack spacing={4} align="flex-start">
@@ -103,7 +103,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
               size="xl"
               name={displayName}
               src={user.avatar_url}
-              bg="blue.500"
+              bg="brand.accent"
             />
 
             <Stack spacing={1} minW={0}>
@@ -112,18 +112,18 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
                 isExternal
                 rel="noopener noreferrer"
                 fontWeight="semibold"
-                color="blue.600"
+                color="brand.title"
                 wordBreak="break-word"
               >
                 {displayName}
               </Link>
-              <Text color="gray.600">@{user.login}</Text>
+              <Text color="brand.text">@{user.login}</Text>
             </Stack>
           </HStack>
 
           {normalizedBio ? <Text>{normalizedBio}</Text> : null}
 
-          <List spacing={2} color="gray.700">
+          <List spacing={2} color="brand.text">
             <ListItem>
               <HStack spacing={2} align="start">
                 <Users size={16} />
@@ -169,7 +169,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
                 <HStack spacing={2} align="start">
                   <Mail size={16} />
                   <Text>{t("profile.userEmail")}:</Text>
-                  <Link href={`mailto:${normalizedEmail}`} color="blue.600">
+                  <Link href={`mailto:${normalizedEmail}`} color="brand.accent">
                     {normalizedEmail}
                   </Link>
                 </HStack>
@@ -185,7 +185,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
                     href={websiteUrl}
                     isExternal
                     rel="noopener noreferrer"
-                    color="blue.600"
+                    color="brand.accent"
                     wordBreak="break-all"
                   >
                     {websiteDisplayText}
@@ -203,7 +203,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
                     href={twitterUrl}
                     isExternal
                     rel="noopener noreferrer"
-                    color="blue.600"
+                    color="brand.accent"
                   >
                     @{twitterUsername}
                   </Link>

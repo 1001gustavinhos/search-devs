@@ -7,6 +7,7 @@ import {
   Heading,
   HStack,
   Input,
+  Text,
   VStack,
 } from "@chakra-ui/react";
 import { useNavigate } from "@tanstack/react-router";
@@ -66,7 +67,12 @@ export function HomePage() {
       align="stretch"
     >
       <Heading as="h1" size="2xl" textAlign="center" letterSpacing="tight">
-        {t("home.title")}
+        <Text as="span" color="brand.searchBlue" fontFamily="'Nunito', sans-serif">
+          Search
+        </Text>{" "}
+        <Text as="span" color="brand.title" fontFamily="'Nunito', sans-serif">
+          d_evs
+        </Text>
       </Heading>
 
       <HStack spacing={3} align="stretch">
@@ -80,14 +86,13 @@ export function HomePage() {
           }}
           placeholder={t("home.searchPlaceholder")}
           size="lg"
-          bg="white"
+          bg="brand.surface"
           flex="1"
         />
 
         <Button
           type="submit"
           size="lg"
-          colorScheme="blue"
           isDisabled={!username.trim() || isSubmitting}
           isLoading={isSubmitting}
           loadingText={t("home.loading")}

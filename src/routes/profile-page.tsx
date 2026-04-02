@@ -266,7 +266,7 @@ export function ProfilePage() {
   if (isLoading) {
     return (
       <VStack spacing={4} minH="50vh" justify="center" align="center">
-        <Spinner size="xl" color="blue.500" />
+        <Spinner size="xl" color="brand.accent" />
         <Text>{t("profile.loading")}</Text>
       </VStack>
     );
@@ -300,13 +300,12 @@ export function ProfilePage() {
           }}
           placeholder={t("home.searchPlaceholder")}
           size="md"
-          bg="white"
+          bg="brand.surface"
           flex="1"
         />
 
         <Button
           type="submit"
-          colorScheme="blue"
           isDisabled={
             !searchUsername.trim() || searchUsername.trim() === username
           }
@@ -323,8 +322,6 @@ export function ProfilePage() {
         href={user.html_url}
         isExternal
         rel="noopener noreferrer"
-        colorScheme="blue"
-        variant="outline"
         alignSelf={{ base: "stretch", md: "flex-start" }}
       >
         {t("profile.contactButton")}
@@ -337,7 +334,7 @@ export function ProfilePage() {
           flexDir={{ base: "column", md: "row" }}
           spacing={4}
         >
-          <Heading as="h3" size="md">
+          <Heading as="h3" size="md" color="brand.title">
             {t("profile.repositoriesTitle")}
           </Heading>
 
@@ -384,7 +381,7 @@ export function ProfilePage() {
 
         {isLoadingRepositories ? (
           <HStack spacing={3}>
-            <Spinner size="sm" color="blue.500" />
+            <Spinner size="sm" color="brand.accent" />
             <Text>{t("profile.repositoriesLoading")}</Text>
           </HStack>
         ) : null}
@@ -399,7 +396,7 @@ export function ProfilePage() {
         {!isLoadingRepositories &&
         !repositoriesErrorMessage &&
         repositories.length === 0 ? (
-          <Text color="gray.600">{t("profile.noRepositories")}</Text>
+          <Text color="brand.text">{t("profile.noRepositories")}</Text>
         ) : null}
 
         <VStack align="stretch" spacing={3}>
@@ -408,19 +405,19 @@ export function ProfilePage() {
               key={repository.id}
               borderWidth="1px"
               borderColor="gray.200"
-              borderRadius="md"
+              borderRadius="4px"
               p={4}
-              bg="white"
+              bg="brand.surface"
             >
               <Link
                 href={repository.html_url}
                 isExternal
                 fontWeight="semibold"
-                color="blue.600"
+                color="brand.title"
               >
                 {repository.name}
               </Link>
-              <Text mt={2} color="gray.700" fontSize="sm">
+              <Text mt={2} color="brand.text" fontSize="sm">
                 {repository.description ??
                   t("profile.repositoryWithoutDescription")}
               </Text>
@@ -428,7 +425,7 @@ export function ProfilePage() {
               <HStack
                 mt={3}
                 spacing={2}
-                color="gray.600"
+                color="brand.text"
                 fontSize="sm"
                 flexWrap="wrap"
               >
@@ -457,7 +454,7 @@ export function ProfilePage() {
 
         {isLoadingMoreRepositories ? (
           <HStack spacing={3}>
-            <Spinner size="sm" color="blue.500" />
+            <Spinner size="sm" color="brand.accent" />
             <Text>{t("profile.repositoriesLoadingMore")}</Text>
           </HStack>
         ) : null}
