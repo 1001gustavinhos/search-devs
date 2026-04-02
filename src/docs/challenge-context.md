@@ -44,13 +44,14 @@ Build a React application that searches GitHub users and displays their reposito
 
 ## Current Technical Decisions For This Project
 
-1. Data fetching: native fetch.
+1. Data fetching: octokit (GitHub API client).
 2. Router: @tanstack/react-router.
 3. UI library: Chakra UI v2.
 4. Validation/modeling: Zod.
 5. i18n: i18next + react-i18next.
 6. Infinite scroll page size: 10.
 7. Default language: Portuguese.
+8. Icon library: lucide-react.
 
 ## Functional Checklist Before Delivery
 
@@ -69,11 +70,11 @@ Build a React application that searches GitHub users and displays their reposito
 
 ## Suggested Commit Strategy
 
-1. chore: setup providers and router baseline
-2. feat: implement home search flow
+1. chore: setup providers, router baseline, and core dependencies (octokit and lucide-react)
+2. feat: implement home search flow with octokit
 3. feat: implement profile user data and error states
 4. feat: implement repository infinite scroll
-5. feat: implement repository sorting controls
+5. feat: implement repository sorting controls and lucide-react icons
 6. feat: add i18n translations and language switch
 7. style: responsive polish and visual adjustments
 8. docs: update README with challenge checklist and deploy link
