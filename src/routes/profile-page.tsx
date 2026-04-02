@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { FormEvent } from "react";
 import {
   Alert,
   AlertIcon,
   Box,
+  Button,
   FormControl,
   FormLabel,
   Heading,
   HStack,
+  Input,
   Link,
   Select,
   Spinner,
@@ -14,7 +17,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Clock3, Star } from "lucide-react";
-import { useParams } from "@tanstack/react-router";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { UserProfileCard } from "../components/user-profile-card.tsx";
 import type { GithubRepository } from "../domain/github-repository.ts";
@@ -67,6 +70,8 @@ function formatTimeSinceLastUpdate(updatedAt: string, language: string) {
 export function ProfilePage() {
   const { username } = useParams({ from: "/profile/$username" });
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const [searchUsername, setSearchUsername] = useState("");
   const [user, setUser] = useState<GithubUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -82,6 +87,24 @@ export function ProfilePage() {
   const [repositoryDirection, setRepositoryDirection] =
     useState<GithubRepoDirection>("desc");
   const loadMoreTriggerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setSearchUsername("");
+  }, [username]);
+
+  const handleSearchSubmit = async (event: FormEvent<HTMLDivElement>) => {
+    event.preventDefault();
+
+    const trimmedUsername = searchUsername.trim();
+    if (!trimmedUsername || trimmedUsername === username) {
+      return;
+    }
+
+    await navigate({
+      to: "/profile/$username",
+      params: { username: trimmedUsername },
+    });
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -264,6 +287,32 @@ export function ProfilePage() {
 
   return (
     <VStack align="stretch" spacing={6} maxW="760px" mx="auto" w="100%">
+      <HStack
+        as="form"
+        onSubmit={handleSearchSubmit}
+        spacing={3}
+        align="stretch"
+      >
+        <Input
+          value={searchUsername}
+          onChange={(event) => {
+            setSearchUsername(event.target.value);
+          }}
+          placeholder={t("home.searchPlaceholder")}
+          size="md"
+          bg="white"
+          flex="1"
+        />
+
+        <Button
+          type="submit"
+          colorScheme="blue"
+          isDisabled={!searchUsername.trim() || searchUsername.trim() === username}
+        >
+          {t("home.searchButton")}
+        </Button>
+      </HStack>
+
       <UserProfileCard user={user} />
 
       <VStack align="stretch" spacing={4}>
