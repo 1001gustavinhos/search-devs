@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
   AlertIcon,
   Avatar,
+  Box,
   Button,
   Heading,
   HStack,
@@ -16,10 +17,12 @@ import {
 } from "@chakra-ui/react";
 import { useParams } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
+import type { GithubRepository } from "../domain/github-repository.ts";
 import type { GithubUser } from "../domain/github-user.ts";
 import {
   getGithubUserByUsername,
   GithubUserNotFoundError,
+  listGithubUserRepositories,
 } from "../services/github-service.ts";
 
 function resolveWebsiteUrl(blog: string | null) {
@@ -45,19 +48,39 @@ export function ProfilePage() {
   const [user, setUser] = useState<GithubUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [repositories, setRepositories] = useState<GithubRepository[]>([]);
+  const [isLoadingRepositories, setIsLoadingRepositories] = useState(false);
+  const [isLoadingMoreRepositories, setIsLoadingMoreRepositories] =
+    useState(false);
+  const [repositoriesErrorMessage, setRepositoriesErrorMessage] = useState("");
+  const [hasMoreRepositories, setHasMoreRepositories] = useState(false);
+  const [currentRepositoryPage, setCurrentRepositoryPage] = useState(1);
+  const loadMoreTriggerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     let isMounted = true;
 
     async function loadUser() {
       setIsLoading(true);
+      setIsLoadingRepositories(true);
       setErrorMessage("");
+      setRepositories([]);
+      setRepositoriesErrorMessage("");
+      setHasMoreRepositories(false);
+      setCurrentRepositoryPage(1);
 
       try {
         const profileUser = await getGithubUserByUsername(username);
+        const firstPageRepositories = await listGithubUserRepositories({
+          username: profileUser.login,
+          page: 1,
+          perPage: 10,
+        });
 
         if (isMounted) {
           setUser(profileUser);
+          setRepositories(firstPageRepositories);
+          setHasMoreRepositories(firstPageRepositories.length === 10);
         }
       } catch (error) {
         if (!isMounted) {
@@ -75,6 +98,7 @@ export function ProfilePage() {
       } finally {
         if (isMounted) {
           setIsLoading(false);
+          setIsLoadingRepositories(false);
         }
       }
     }
@@ -85,6 +109,68 @@ export function ProfilePage() {
       isMounted = false;
     };
   }, [username, t]);
+
+  const handleLoadMoreRepositories = useCallback(async () => {
+    if (!user || isLoadingMoreRepositories || !hasMoreRepositories) {
+      return;
+    }
+
+    setRepositoriesErrorMessage("");
+    setIsLoadingMoreRepositories(true);
+
+    const nextPage = currentRepositoryPage + 1;
+
+    try {
+      const nextRepositories = await listGithubUserRepositories({
+        username: user.login,
+        page: nextPage,
+        perPage: 10,
+      });
+
+      setRepositories((previousRepositories) => [
+        ...previousRepositories,
+        ...nextRepositories,
+      ]);
+      setCurrentRepositoryPage(nextPage);
+      setHasMoreRepositories(nextRepositories.length === 10);
+    } catch {
+      setRepositoriesErrorMessage(t("profile.repositoriesLoadError"));
+      setHasMoreRepositories(false);
+    } finally {
+      setIsLoadingMoreRepositories(false);
+    }
+  }, [
+    currentRepositoryPage,
+    hasMoreRepositories,
+    isLoadingMoreRepositories,
+    t,
+    user,
+  ]);
+
+  useEffect(() => {
+    if (!hasMoreRepositories || !loadMoreTriggerRef.current) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          void handleLoadMoreRepositories();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "160px 0px",
+        threshold: 0,
+      },
+    );
+
+    observer.observe(loadMoreTriggerRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [handleLoadMoreRepositories, hasMoreRepositories]);
 
   if (isLoading) {
     return (
@@ -142,13 +228,25 @@ export function ProfilePage() {
             </Button>
 
             {websiteUrl ? (
-              <Button as={Link} href={websiteUrl} isExternal variant="outline" size="sm">
+              <Button
+                as={Link}
+                href={websiteUrl}
+                isExternal
+                variant="outline"
+                size="sm"
+              >
                 {t("profile.openWebsite")}
               </Button>
             ) : null}
 
             {twitterUrl ? (
-              <Button as={Link} href={twitterUrl} isExternal variant="outline" size="sm">
+              <Button
+                as={Link}
+                href={twitterUrl}
+                isExternal
+                variant="outline"
+                size="sm"
+              >
                 {t("profile.openTwitter")}
               </Button>
             ) : null}
@@ -172,6 +270,67 @@ export function ProfilePage() {
           <StatNumber>{user.public_repos}</StatNumber>
         </Stat>
       </HStack>
+
+      <VStack align="stretch" spacing={4}>
+        <Heading as="h3" size="md">
+          {t("profile.repositoriesTitle")}
+        </Heading>
+
+        {isLoadingRepositories ? (
+          <HStack spacing={3}>
+            <Spinner size="sm" color="blue.500" />
+            <Text>{t("profile.repositoriesLoading")}</Text>
+          </HStack>
+        ) : null}
+
+        {repositoriesErrorMessage ? (
+          <Alert status="error" borderRadius="md">
+            <AlertIcon />
+            {repositoriesErrorMessage}
+          </Alert>
+        ) : null}
+
+        {!isLoadingRepositories &&
+        !repositoriesErrorMessage &&
+        repositories.length === 0 ? (
+          <Text color="gray.600">{t("profile.noRepositories")}</Text>
+        ) : null}
+
+        <VStack align="stretch" spacing={3}>
+          {repositories.map((repository) => (
+            <Box
+              key={repository.id}
+              borderWidth="1px"
+              borderColor="gray.200"
+              borderRadius="md"
+              p={4}
+              bg="white"
+            >
+              <Link
+                href={repository.html_url}
+                isExternal
+                fontWeight="semibold"
+                color="blue.600"
+              >
+                {repository.name}
+              </Link>
+              <Text mt={2} color="gray.700" fontSize="sm">
+                {repository.description ??
+                  t("profile.repositoryWithoutDescription")}
+              </Text>
+            </Box>
+          ))}
+        </VStack>
+
+        {hasMoreRepositories ? <Box ref={loadMoreTriggerRef} h="1px" /> : null}
+
+        {isLoadingMoreRepositories ? (
+          <HStack spacing={3}>
+            <Spinner size="sm" color="blue.500" />
+            <Text>{t("profile.repositoriesLoadingMore")}</Text>
+          </HStack>
+        ) : null}
+      </VStack>
     </VStack>
   );
 }

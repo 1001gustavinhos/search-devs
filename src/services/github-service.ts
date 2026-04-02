@@ -1,3 +1,5 @@
+import { z } from "zod";
+import { githubRepositorySchema } from "../domain/github-repository.ts";
 import { githubUserSchema } from "../domain/github-user.ts";
 import { octokit } from "../lib/octokit.ts";
 
@@ -27,4 +29,24 @@ export async function getGithubUserByUsername(username: string) {
 
     throw error;
   }
+}
+
+type ListGithubUserRepositoriesParams = {
+  username: string;
+  page: number;
+  perPage?: number;
+};
+
+export async function listGithubUserRepositories({
+  username,
+  page,
+  perPage = 10,
+}: ListGithubUserRepositoriesParams) {
+  const response = await octokit.request("GET /users/{username}/repos", {
+    username,
+    page,
+    per_page: perPage,
+  });
+
+  return z.array(githubRepositorySchema).parse(response.data);
 }
