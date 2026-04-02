@@ -2,9 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
   AlertIcon,
-  Avatar,
   Box,
-  Button,
   FormControl,
   FormLabel,
   Heading,
@@ -12,14 +10,13 @@ import {
   Link,
   Select,
   Spinner,
-  Stat,
-  StatLabel,
-  StatNumber,
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { Clock3, Star } from "lucide-react";
 import { useParams } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
+import { UserProfileCard } from "../components/user-profile-card.tsx";
 import type { GithubRepository } from "../domain/github-repository.ts";
 import type { GithubUser } from "../domain/github-user.ts";
 import {
@@ -30,26 +27,46 @@ import {
   listGithubUserRepositories,
 } from "../services/github-service.ts";
 
-function resolveWebsiteUrl(blog: string | null) {
-  if (!blog) {
-    return null;
+function formatTimeSinceLastUpdate(updatedAt: string, language: string) {
+  const locale = language.startsWith("pt") ? "pt-BR" : "en-US";
+  const formatter = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+
+  const now = Date.now();
+  const updatedTimestamp = new Date(updatedAt).getTime();
+  const diffInSeconds = Math.round((updatedTimestamp - now) / 1000);
+  const absoluteSeconds = Math.abs(diffInSeconds);
+
+  if (absoluteSeconds < 60) {
+    return formatter.format(diffInSeconds, "second");
   }
 
-  const trimmedBlog = blog.trim();
-  if (!trimmedBlog) {
-    return null;
+  const diffInMinutes = Math.round(diffInSeconds / 60);
+  if (Math.abs(diffInMinutes) < 60) {
+    return formatter.format(diffInMinutes, "minute");
   }
 
-  if (trimmedBlog.startsWith("http://") || trimmedBlog.startsWith("https://")) {
-    return trimmedBlog;
+  const diffInHours = Math.round(diffInMinutes / 60);
+  if (Math.abs(diffInHours) < 24) {
+    return formatter.format(diffInHours, "hour");
   }
 
-  return `https://${trimmedBlog}`;
+  const diffInDays = Math.round(diffInHours / 24);
+  if (Math.abs(diffInDays) < 30) {
+    return formatter.format(diffInDays, "day");
+  }
+
+  const diffInMonths = Math.round(diffInDays / 30);
+  if (Math.abs(diffInMonths) < 12) {
+    return formatter.format(diffInMonths, "month");
+  }
+
+  const diffInYears = Math.round(diffInMonths / 12);
+  return formatter.format(diffInYears, "year");
 }
 
 export function ProfilePage() {
   const { username } = useParams({ from: "/profile/$username" });
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [user, setUser] = useState<GithubUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -245,82 +262,9 @@ export function ProfilePage() {
     return null;
   }
 
-  const websiteUrl = resolveWebsiteUrl(user.blog);
-  const twitterUrl = user.twitter_username
-    ? `https://x.com/${user.twitter_username}`
-    : null;
-
   return (
     <VStack align="stretch" spacing={6} maxW="760px" mx="auto" w="100%">
-      <HStack spacing={5} align="flex-start">
-        <Avatar
-          size="2xl"
-          name={user.name ?? user.login}
-          src={user.avatar_url}
-          bg="blue.500"
-        />
-
-        <VStack align="flex-start" spacing={2} flex="1">
-          <Heading as="h2" size="lg">
-            {user.name ?? user.login}
-          </Heading>
-          <Text color="gray.600">@{user.login}</Text>
-          {user.bio ? <Text>{user.bio}</Text> : null}
-
-          <HStack spacing={2} flexWrap="wrap">
-            <Button
-              as={Link}
-              href={user.html_url}
-              isExternal
-              colorScheme="blue"
-              size="sm"
-            >
-              {t("profile.openGithub")}
-            </Button>
-
-            {websiteUrl ? (
-              <Button
-                as={Link}
-                href={websiteUrl}
-                isExternal
-                variant="outline"
-                size="sm"
-              >
-                {t("profile.openWebsite")}
-              </Button>
-            ) : null}
-
-            {twitterUrl ? (
-              <Button
-                as={Link}
-                href={twitterUrl}
-                isExternal
-                variant="outline"
-                size="sm"
-              >
-                {t("profile.openTwitter")}
-              </Button>
-            ) : null}
-          </HStack>
-        </VStack>
-      </HStack>
-
-      <HStack spacing={6} flexWrap="wrap" align="stretch">
-        <Stat>
-          <StatLabel>{t("profile.followers")}</StatLabel>
-          <StatNumber>{user.followers}</StatNumber>
-        </Stat>
-
-        <Stat>
-          <StatLabel>{t("profile.following")}</StatLabel>
-          <StatNumber>{user.following}</StatNumber>
-        </Stat>
-
-        <Stat>
-          <StatLabel>{t("profile.publicRepos")}</StatLabel>
-          <StatNumber>{user.public_repos}</StatNumber>
-        </Stat>
-      </HStack>
+      <UserProfileCard user={user} />
 
       <VStack align="stretch" spacing={4}>
         <HStack
@@ -416,6 +360,29 @@ export function ProfilePage() {
                 {repository.description ??
                   t("profile.repositoryWithoutDescription")}
               </Text>
+
+              <HStack
+                mt={3}
+                spacing={4}
+                color="gray.600"
+                fontSize="sm"
+                flexWrap="wrap"
+              >
+                <HStack spacing={1}>
+                  <Star size={14} />
+                  <Text>{repository.stargazers_count}</Text>
+                </HStack>
+
+                <HStack spacing={1}>
+                  <Clock3 size={14} />
+                  <Text>
+                    {`${t("profile.updatedPrefix")} ${formatTimeSinceLastUpdate(
+                      repository.updated_at,
+                      i18n.language,
+                    )}`}
+                  </Text>
+                </HStack>
+              </HStack>
             </Box>
           ))}
         </VStack>
