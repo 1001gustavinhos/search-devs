@@ -5,9 +5,12 @@ import {
   Avatar,
   Box,
   Button,
+  FormControl,
+  FormLabel,
   Heading,
   HStack,
   Link,
+  Select,
   Spinner,
   Stat,
   StatLabel,
@@ -20,6 +23,8 @@ import { useTranslation } from "react-i18next";
 import type { GithubRepository } from "../domain/github-repository.ts";
 import type { GithubUser } from "../domain/github-user.ts";
 import {
+  type GithubRepoDirection,
+  type GithubRepoSort,
   getGithubUserByUsername,
   GithubUserNotFoundError,
   listGithubUserRepositories,
@@ -55,6 +60,9 @@ export function ProfilePage() {
   const [repositoriesErrorMessage, setRepositoriesErrorMessage] = useState("");
   const [hasMoreRepositories, setHasMoreRepositories] = useState(false);
   const [currentRepositoryPage, setCurrentRepositoryPage] = useState(1);
+  const [repositorySort, setRepositorySort] = useState<GithubRepoSort>("updated");
+  const [repositoryDirection, setRepositoryDirection] =
+    useState<GithubRepoDirection>("desc");
   const loadMoreTriggerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -62,7 +70,6 @@ export function ProfilePage() {
 
     async function loadUser() {
       setIsLoading(true);
-      setIsLoadingRepositories(true);
       setErrorMessage("");
       setRepositories([]);
       setRepositoriesErrorMessage("");
@@ -71,16 +78,9 @@ export function ProfilePage() {
 
       try {
         const profileUser = await getGithubUserByUsername(username);
-        const firstPageRepositories = await listGithubUserRepositories({
-          username: profileUser.login,
-          page: 1,
-          perPage: 10,
-        });
 
         if (isMounted) {
           setUser(profileUser);
-          setRepositories(firstPageRepositories);
-          setHasMoreRepositories(firstPageRepositories.length === 10);
         }
       } catch (error) {
         if (!isMounted) {
@@ -98,7 +98,6 @@ export function ProfilePage() {
       } finally {
         if (isMounted) {
           setIsLoading(false);
-          setIsLoadingRepositories(false);
         }
       }
     }
@@ -109,6 +108,53 @@ export function ProfilePage() {
       isMounted = false;
     };
   }, [username, t]);
+
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    const usernameForRepositories = user.login;
+
+    let isMounted = true;
+
+    async function loadFirstRepositoriesPage() {
+      setIsLoadingRepositories(true);
+      setRepositoriesErrorMessage("");
+      setRepositories([]);
+      setHasMoreRepositories(false);
+      setCurrentRepositoryPage(1);
+
+      try {
+        const firstPageRepositories = await listGithubUserRepositories({
+          username: usernameForRepositories,
+          page: 1,
+          perPage: 10,
+          sort: repositorySort,
+          direction: repositoryDirection,
+        });
+
+        if (isMounted) {
+          setRepositories(firstPageRepositories);
+          setHasMoreRepositories(firstPageRepositories.length === 10);
+        }
+      } catch {
+        if (isMounted) {
+          setRepositoriesErrorMessage(t("profile.repositoriesLoadError"));
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoadingRepositories(false);
+        }
+      }
+    }
+
+    void loadFirstRepositoriesPage();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [repositoryDirection, repositorySort, t, user]);
 
   const handleLoadMoreRepositories = useCallback(async () => {
     if (!user || isLoadingMoreRepositories || !hasMoreRepositories) {
@@ -125,6 +171,8 @@ export function ProfilePage() {
         username: user.login,
         page: nextPage,
         perPage: 10,
+        sort: repositorySort,
+        direction: repositoryDirection,
       });
 
       setRepositories((previousRepositories) => [
@@ -143,6 +191,8 @@ export function ProfilePage() {
     currentRepositoryPage,
     hasMoreRepositories,
     isLoadingMoreRepositories,
+    repositoryDirection,
+    repositorySort,
     t,
     user,
   ]);
@@ -272,9 +322,49 @@ export function ProfilePage() {
       </HStack>
 
       <VStack align="stretch" spacing={4}>
-        <Heading as="h3" size="md">
-          {t("profile.repositoriesTitle")}
-        </Heading>
+        <HStack justify="space-between" align={{ base: "stretch", md: "end" }} flexDir={{ base: "column", md: "row" }} spacing={4}>
+          <Heading as="h3" size="md">
+            {t("profile.repositoriesTitle")}
+          </Heading>
+
+          <HStack spacing={3} flexWrap="wrap">
+            <FormControl minW="180px">
+              <FormLabel mb={1} fontSize="sm">
+                {t("profile.repositoriesSortLabel")}
+              </FormLabel>
+              <Select
+                size="sm"
+                bg="white"
+                value={repositorySort}
+                onChange={(event) => {
+                  setRepositorySort(event.target.value as GithubRepoSort);
+                }}
+              >
+                <option value="created">{t("profile.sortCreated")}</option>
+                <option value="updated">{t("profile.sortUpdated")}</option>
+                <option value="pushed">{t("profile.sortPushed")}</option>
+                <option value="full_name">{t("profile.sortFullName")}</option>
+              </Select>
+            </FormControl>
+
+            <FormControl minW="140px">
+              <FormLabel mb={1} fontSize="sm">
+                {t("profile.repositoriesDirectionLabel")}
+              </FormLabel>
+              <Select
+                size="sm"
+                bg="white"
+                value={repositoryDirection}
+                onChange={(event) => {
+                  setRepositoryDirection(event.target.value as GithubRepoDirection);
+                }}
+              >
+                <option value="desc">{t("profile.directionDesc")}</option>
+                <option value="asc">{t("profile.directionAsc")}</option>
+              </Select>
+            </FormControl>
+          </HStack>
+        </HStack>
 
         {isLoadingRepositories ? (
           <HStack spacing={3}>

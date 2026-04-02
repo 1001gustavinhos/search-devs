@@ -10,6 +10,9 @@ export class GithubUserNotFoundError extends Error {
   }
 }
 
+export type GithubRepoSort = "created" | "updated" | "pushed" | "full_name";
+export type GithubRepoDirection = "asc" | "desc";
+
 export async function getGithubUserByUsername(username: string) {
   try {
     const response = await octokit.request("GET /users/{username}", {
@@ -35,17 +38,23 @@ type ListGithubUserRepositoriesParams = {
   username: string;
   page: number;
   perPage?: number;
+  sort?: GithubRepoSort;
+  direction?: GithubRepoDirection;
 };
 
 export async function listGithubUserRepositories({
   username,
   page,
   perPage = 10,
+  sort = "updated",
+  direction = "desc",
 }: ListGithubUserRepositoriesParams) {
   const response = await octokit.request("GET /users/{username}/repos", {
     username,
     page,
     per_page: perPage,
+    sort,
+    direction,
   });
 
   return z.array(githubRepositorySchema).parse(response.data);
