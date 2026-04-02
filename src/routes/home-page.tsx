@@ -67,7 +67,11 @@ export function HomePage() {
       align="stretch"
     >
       <Heading as="h1" size="2xl" textAlign="center" letterSpacing="tight">
-        <Text as="span" color="brand.searchBlue" fontFamily="'Nunito', sans-serif">
+        <Text
+          as="span"
+          color="brand.searchBlue"
+          fontFamily="'Nunito', sans-serif"
+        >
           Search
         </Text>{" "}
         <Text as="span" color="brand.title" fontFamily="'Nunito', sans-serif">

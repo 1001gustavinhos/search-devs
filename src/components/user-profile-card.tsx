@@ -95,7 +95,10 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
   const twitterUrl = getTwitterProfileUrl(user.twitter_username);
 
   return (
-    <Card bg={{ base: "brand.mobileProfileCardBg", md: "brand.surface" }} shadow="sm">
+    <Card
+      bg={{ base: "brand.mobileProfileCardBg", md: "brand.surface" }}
+      shadow="sm"
+    >
       <CardBody>
         <Stack spacing={4}>
           <HStack spacing={4} align="flex-start">
@@ -117,7 +120,9 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
               >
                 {displayName}
               </Link>
-              <Text color="brand.text">@{user.login}</Text>
+              <Text color={{ base: "brand.text", md: "brand.usernameDesktop" }}>
+                @{user.login}
+              </Text>
             </Stack>
           </HStack>
 

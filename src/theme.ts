@@ -16,6 +16,7 @@ export const theme = extendTheme({
       surface: "#FFFFFF",
       title: "#171923",
       text: "#4A5568",
+      usernameDesktop: "#A0AEC0",
     },
   },
   fonts: {
