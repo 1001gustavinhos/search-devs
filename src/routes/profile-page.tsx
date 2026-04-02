@@ -18,6 +18,7 @@ import {
   Stack,
   Spinner,
   Text,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import {
@@ -97,6 +98,7 @@ export function ProfilePage() {
   const { username } = useParams({ from: "/profile/$username" });
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const toast = useToast();
   const [searchUsername, setSearchUsername] = useState("");
   const [user, setUser] = useState<GithubUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -126,10 +128,24 @@ export function ProfilePage() {
       return;
     }
 
-    await navigate({
-      to: "/profile/$username",
-      params: { username: trimmedUsername },
-    });
+    try {
+      await getGithubUserByUsername(trimmedUsername);
+
+      await navigate({
+        to: "/profile/$username",
+        params: { username: trimmedUsername },
+      });
+    } catch (error) {
+      if (error instanceof GithubUserNotFoundError) {
+        toast({
+          title: t("profile.userNotFound"),
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
+      }
+    }
   };
 
   useEffect(() => {
