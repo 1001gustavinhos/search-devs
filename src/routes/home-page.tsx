@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { KeyboardEvent, SyntheticEvent } from "react";
+import type { SyntheticEvent } from "react";
 import {
   Alert,
   AlertIcon,
@@ -27,7 +27,9 @@ export function HomePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const submitSearch = async () => {
+  const handleSubmit = async (event: SyntheticEvent<HTMLDivElement>) => {
+    event.preventDefault();
+
     const trimmedUsername = username.trim();
     if (!trimmedUsername) {
       return;
@@ -53,20 +55,6 @@ export function HomePage() {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const handleSubmit = async (event: SyntheticEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    await submitSearch();
-  };
-
-  const handleInputKeyDown = async (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== "Enter") {
-      return;
-    }
-
-    event.preventDefault();
-    await submitSearch();
   };
 
   return (
@@ -109,9 +97,6 @@ export function HomePage() {
               if (errorMessage) {
                 setErrorMessage("");
               }
-            }}
-            onKeyDown={(event) => {
-              void handleInputKeyDown(event);
             }}
             placeholder={t("home.searchPlaceholder")}
             size="lg"
