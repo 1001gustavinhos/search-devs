@@ -16,8 +16,14 @@ const resources = {
       },
       profile: {
         title: "Perfil de {{username}}",
-        description:
-          "A pagina de perfil sera implementada nas proximas etapas do desafio.",
+        loading: "Carregando perfil...",
+        userNotFound: "Nao ha usuarios com esse nome",
+        genericError:
+          "Nao foi possivel carregar o perfil agora. Tente novamente.",
+        openGithub: "Abrir no GitHub",
+        followers: "Seguidores",
+        following: "Seguindo",
+        publicRepos: "Repositorios publicos",
       },
     },
   },
@@ -34,8 +40,13 @@ const resources = {
       },
       profile: {
         title: "Profile: {{username}}",
-        description:
-          "The profile page will be implemented in the next challenge stages.",
+        loading: "Loading profile...",
+        userNotFound: "No users found with this name",
+        genericError: "Could not load the profile right now. Please try again.",
+        openGithub: "Open on GitHub",
+        followers: "Followers",
+        following: "Following",
+        publicRepos: "Public repositories",
       },
     },
   },
