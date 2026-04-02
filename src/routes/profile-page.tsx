@@ -5,7 +5,6 @@ import {
   AlertIcon,
   Box,
   Button,
-  Heading,
   IconButton,
   HStack,
   Input,
@@ -30,6 +29,7 @@ import {
 } from "lucide-react";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
+import { SearchWordmark } from "../components/search-wordmark.tsx";
 import { UserProfileCard } from "../components/user-profile-card.tsx";
 import type { GithubRepository } from "../domain/github-repository.ts";
 import type { GithubUser } from "../domain/github-user.ts";
@@ -321,48 +321,7 @@ export function ProfilePage() {
         display={{ base: "none", md: "flex" }}
       >
         <Link href="/" textDecoration="none" _hover={{ textDecoration: "none" }}>
-          <Heading
-            as="h1"
-            letterSpacing="tight"
-            fontSize="32px"
-            lineHeight="1"
-            fontWeight="medium"
-            whiteSpace="nowrap"
-            flexShrink={0}
-          >
-            <Text
-              as="span"
-              color="brand.searchBlue"
-              fontFamily="'Nunito', sans-serif"
-              fontWeight="medium"
-            >
-              Search
-            </Text>{" "}
-            <Text
-              as="span"
-              color="brand.accent"
-              fontFamily="'Nunito', sans-serif"
-              fontWeight="medium"
-            >
-              d
-            </Text>
-            <Text
-              as="span"
-              color="brand.accent"
-              fontFamily="'Nunito', sans-serif"
-              fontWeight="bold"
-            >
-              _
-            </Text>
-            <Text
-              as="span"
-              color="brand.accent"
-              fontFamily="'Nunito', sans-serif"
-              fontWeight="medium"
-            >
-              evs
-            </Text>
-          </Heading>
+          <SearchWordmark fontSize="32px" textAlign="left" />
         </Link>
 
         <InputGroup flex="1" maxW="590px">
@@ -539,7 +498,7 @@ export function ProfilePage() {
             ) : null}
 
             <VStack align="stretch" spacing={0}>
-              {repositories.map((repository, index) => (
+              {repositories.map((repository) => (
                 <Box
                   key={repository.id}
                   borderRadius="4px"
