@@ -22,6 +22,23 @@ import {
   GithubUserNotFoundError,
 } from "../services/github-service.ts";
 
+function resolveWebsiteUrl(blog: string | null) {
+  if (!blog) {
+    return null;
+  }
+
+  const trimmedBlog = blog.trim();
+  if (!trimmedBlog) {
+    return null;
+  }
+
+  if (trimmedBlog.startsWith("http://") || trimmedBlog.startsWith("https://")) {
+    return trimmedBlog;
+  }
+
+  return `https://${trimmedBlog}`;
+}
+
 export function ProfilePage() {
   const { username } = useParams({ from: "/profile/$username" });
   const { t } = useTranslation();
@@ -91,6 +108,11 @@ export function ProfilePage() {
     return null;
   }
 
+  const websiteUrl = resolveWebsiteUrl(user.blog);
+  const twitterUrl = user.twitter_username
+    ? `https://x.com/${user.twitter_username}`
+    : null;
+
   return (
     <VStack align="stretch" spacing={6} maxW="760px" mx="auto" w="100%">
       <HStack spacing={5} align="flex-start">
@@ -108,9 +130,29 @@ export function ProfilePage() {
           <Text color="gray.600">@{user.login}</Text>
           {user.bio ? <Text>{user.bio}</Text> : null}
 
-          <Button as={Link} href={user.html_url} isExternal colorScheme="blue" size="sm">
-            {t("profile.openGithub")}
-          </Button>
+          <HStack spacing={2} flexWrap="wrap">
+            <Button
+              as={Link}
+              href={user.html_url}
+              isExternal
+              colorScheme="blue"
+              size="sm"
+            >
+              {t("profile.openGithub")}
+            </Button>
+
+            {websiteUrl ? (
+              <Button as={Link} href={websiteUrl} isExternal variant="outline" size="sm">
+                {t("profile.openWebsite")}
+              </Button>
+            ) : null}
+
+            {twitterUrl ? (
+              <Button as={Link} href={twitterUrl} isExternal variant="outline" size="sm">
+                {t("profile.openTwitter")}
+              </Button>
+            ) : null}
+          </HStack>
         </VStack>
       </HStack>
 
