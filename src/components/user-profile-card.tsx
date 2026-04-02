@@ -16,10 +16,10 @@ import type { ReactNode } from "react";
 import {
   Bird,
   Building2,
+  Heart,
   LinkIcon,
   Mail,
   MapPin,
-  UserPlus,
   Users,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -155,16 +155,16 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
                   <Users size={18} />
                 </InfoIcon>
                 <Text>
-                  {t("profile.statsFollowers")}: {user.followers}
+                  {user.followers} {t("profile.statsFollowers").toLowerCase()}
                 </Text>
               </HStack>
 
               <HStack spacing={1} color="brand.text">
                 <InfoIcon>
-                  <UserPlus size={18} />
+                  <Heart size={18} />
                 </InfoIcon>
                 <Text>
-                  {t("profile.statsFollowing")}: {user.following}
+                  {user.following} {t("profile.statsFollowing").toLowerCase()}
                 </Text>
               </HStack>
             </HStack>
@@ -277,24 +277,24 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
               mt={normalizedBio ? 3 : 0}
               fontSize="14px"
             >
-              <ListItem>
+              <ListItem pt="8px">
                 <HStack spacing={1} align="center">
                   <InfoIcon>
                     <Users size={18} />
                   </InfoIcon>
                   <Text>
-                    {t("profile.statsFollowers")}: {user.followers}
+                    {user.followers} {t("profile.statsFollowers").toLowerCase()}
                   </Text>
                 </HStack>
               </ListItem>
 
-              <ListItem>
+              <ListItem pb="8px">
                 <HStack spacing={1} align="center">
                   <InfoIcon>
-                    <UserPlus size={18} />
+                    <Heart size={18} />
                   </InfoIcon>
                   <Text>
-                    {t("profile.statsFollowing")}: {user.following}
+                    {user.following} {t("profile.statsFollowing").toLowerCase()}
                   </Text>
                 </HStack>
               </ListItem>
