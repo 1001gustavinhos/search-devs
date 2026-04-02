@@ -1,50 +1,46 @@
-import i18n from 'i18next'
-import { initReactI18next } from 'react-i18next'
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 
 const resources = {
   pt: {
     translation: {
-      app: {
-        title: 'Search Devs',
-      },
       home: {
-        title: 'Buscar perfis do GitHub',
-        description:
-          'Digite um usuario para visualizar perfil e repositorios com scroll infinito.',
+        title: "Search d_evs",
+        description: "Busque um usuario do GitHub para abrir o perfil.",
+        searchPlaceholder: "Digite o username do GitHub",
+        searchButton: "Buscar",
       },
       profile: {
-        title: 'Perfil de {{username}}',
+        title: "Perfil de {{username}}",
         description:
-          'A pagina de perfil sera implementada nas proximas etapas do desafio.',
+          "A pagina de perfil sera implementada nas proximas etapas do desafio.",
       },
     },
   },
   en: {
     translation: {
-      app: {
-        title: 'Search Devs',
-      },
       home: {
-        title: 'Search GitHub profiles',
-        description:
-          'Type a username to view profile and repositories with infinite scroll.',
+        title: "Search d_evs",
+        description: "Search for a GitHub user to open the profile.",
+        searchPlaceholder: "Type the GitHub username",
+        searchButton: "Search",
       },
       profile: {
-        title: 'Profile: {{username}}',
+        title: "Profile: {{username}}",
         description:
-          'The profile page will be implemented in the next challenge stages.',
+          "The profile page will be implemented in the next challenge stages.",
       },
     },
   },
-} as const
+} as const;
 
 void i18n.use(initReactI18next).init({
   resources,
-  lng: 'pt',
-  fallbackLng: 'en',
+  lng: "pt",
+  fallbackLng: "en",
   interpolation: {
     escapeValue: false,
   },
-})
+});
 
-export default i18n
+export default i18n;
