@@ -1,121 +1,102 @@
-# React + TypeScript + Vite
+# search-devs
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicação em React + TypeScript + Vite para buscar usuários do GitHub e explorar seus repositórios com paginação infinita e ordenação.
 
-Currently, two official plugins are available:
+## Visão geral
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+O projeto foi construído como uma interface de busca de perfis do GitHub. A tela inicial permite pesquisar um username e navegar para uma rota compartilhável de perfil. A página de perfil exibe dados do usuário, links externos úteis e a lista de repositórios com carregamento incremental.
 
-## React Compiler
+O foco principal foi entregar uma experiência responsiva, com visual consistente em mobile e desktop, usando Chakra UI v2 como base de componentes e um tema centralizado para manter padronização visual.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Stack utilizada
 
-## Expanding the ESLint configuration
+- React 19
+- TypeScript
+- Vite
+- Chakra UI v2
+- TanStack Router
+- Zod
+- Octokit
+- i18next e react-i18next
+- lucide-react
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Estrutura do projeto
 
-````js
-export default defineConfig([
-  # search-devs
+- `src/routes/home-page.tsx`: tela inicial de busca por usuário.
+- `src/routes/profile-page.tsx`: página de perfil, busca do header, botão de contato e repositórios.
+- `src/components/user-profile-card.tsx`: card com dados do usuário.
+- `src/components/search-wordmark.tsx`: marca compartilhada `Search d_evs` usada na home e no header do profile.
+- `src/routes/root-layout.tsx`: layout base da aplicação e ajustes de padding por rota.
+- `src/theme.ts`: tokens globais, cores, radii, hover states e estilos base do Chakra.
+- `src/services/github-service.ts`: integração com a API do GitHub via Octokit.
+- `src/domain/*.ts`: modelos tipados com Zod para usuário e repositório.
+- `src/i18n.ts`: textos da interface em português e inglês.
 
-  Aplicação em React + TypeScript + Vite para buscar usuários do GitHub e explorar seus repositórios com paginação infinita e ordenação.
+## Fluxo da aplicação
 
-  ## Visão geral
+1. O usuário informa um username na home.
+2. A aplicação valida o username e consulta a API do GitHub.
+3. Se o usuário existir, navega para `/profile/:username`.
+4. A página de perfil carrega os dados do usuário e a lista de repositórios.
+5. Os repositórios são carregados em blocos de 10 itens com infinite scroll.
+6. O usuário pode alterar ordenação e direção da listagem, recarregando os dados automaticamente.
 
-  O projeto foi construído como uma interface de busca de perfis do GitHub. A tela inicial permite pesquisar um username e navegar para uma rota compartilhável de perfil. A página de perfil exibe dados do usuário, links externos úteis e a lista de repositórios com carregamento incremental.
+## Práticas utilizadas
 
-  O foco principal foi entregar uma experiência responsiva, com visual consistente em mobile e desktop, usando Chakra UI v2 como base de componentes e um tema centralizado para manter padronização visual.
+### Componentização
 
-  ## Stack utilizada
+Os blocos repetidos foram isolados em componentes menores quando isso ajudou na leitura sem mudar layout. Exemplo: a marca `Search d_evs` foi centralizada em um componente compartilhado para evitar duplicação entre home e profile.
 
-  - React 19
-  - TypeScript
-  - Vite
-  - Chakra UI v2
-  - TanStack Router
-  - Zod
-  - Octokit
-  - i18next e react-i18next
-  - lucide-react
+### Tema centralizado
 
-  ## Estrutura do projeto
+As cores, hover states, radii e comportamento-base dos botões foram consolidados em `src/theme.ts`. Isso reduz repetição de estilo espalhada pelos arquivos de rota.
 
-  - `src/routes/home-page.tsx`: tela inicial de busca por usuário.
-  - `src/routes/profile-page.tsx`: página de perfil, busca do header, botão de contato e repositórios.
-  - `src/components/user-profile-card.tsx`: card com dados do usuário.
-  - `src/components/search-wordmark.tsx`: marca compartilhada `Search d_evs` usada na home e no header do profile.
-  - `src/routes/root-layout.tsx`: layout base da aplicação e ajustes de padding por rota.
-  - `src/theme.ts`: tokens globais, cores, radii, hover states e estilos base do Chakra.
-  - `src/services/github-service.ts`: integração com a API do GitHub via Octokit.
-  - `src/domain/*.ts`: modelos tipados com Zod para usuário e repositório.
-  - `src/i18n.ts`: textos da interface em português e inglês.
+### Tipagem e modelagem
 
-  ## Fluxo da aplicação
+Os dados retornados pela API foram modelados com Zod para manter contratos claros entre aplicação e backend.
 
-  1. O usuário informa um username na home.
-  2. A aplicação valida o username e consulta a API do GitHub.
-  3. Se o usuário existir, navega para `/profile/:username`.
-  4. A página de perfil carrega os dados do usuário e a lista de repositórios.
-  5. Os repositórios são carregados em blocos de 10 itens com infinite scroll.
-  6. O usuário pode alterar ordenação e direção da listagem, recarregando os dados automaticamente.
+### i18n
 
-  ## Práticas utilizadas
+A interface usa i18next para suportar português e inglês. Os textos estão centralizados em `src/i18n.ts`.
 
-  ### Componentização
+### Responsividade
 
-  Os blocos repetidos foram isolados em componentes menores quando isso ajudou na leitura sem mudar layout. Exemplo: a marca `Search d_evs` foi centralizada em um componente compartilhado para evitar duplicação entre home e profile.
+A interface foi pensada para mobile e desktop. O comportamento visual muda por breakpoint, mas sem alterar a lógica de negócio.
 
-  ### Tema centralizado
+### Infinite scroll
 
-  As cores, hover states, radii e comportamento-base dos botões foram consolidados em `src/theme.ts`. Isso reduz repetição de estilo espalhada pelos arquivos de rota.
+A lista de repositórios carrega novos itens automaticamente quando o usuário chega próximo ao fim da lista. O tamanho da página é 10, conforme definido no desafio.
 
-  ### Tipagem e modelagem
+## Funcionalidades
 
-  Os dados retornados pela API foram modelados com Zod para manter contratos claros entre aplicação e backend.
+- Busca de usuário do GitHub a partir da home.
+- Rota compartilhável de perfil em `/profile/:username`.
+- Exibição de avatar, nome, login e dados públicos do perfil.
+- Exibição de website/blog e Twitter quando disponíveis.
+- Lista de repositórios com ordenação e direção.
+- Infinite scroll para carregar repositórios aos poucos.
+- Interface responsiva para mobile e desktop.
 
-  ### i18n
+## Botão de contato
 
-  A interface usa i18next para suportar português e inglês. Os textos estão centralizados em `src/i18n.ts`.
+O botão de contato foi tratado como um ponto provisório de implementação.
 
-  ### Responsividade
+Estado atual:
 
-  A interface foi pensada para mobile e desktop. O comportamento visual muda por breakpoint, mas sem alterar a lógica de negócio.
+- existe apenas no desktop;
+- abre o perfil público do GitHub do usuário;
+- foi mantido como solução temporária porque não havia orientação funcional final no desafio.
 
-  ### Infinite scroll
+Observação importante:
 
-  A lista de repositórios carrega novos itens automaticamente quando o usuário chega próximo ao fim da lista. O tamanho da página é 10, conforme definido no desafio.
+- o comportamento do botão deve ser revisado antes da entrega final, caso haja uma regra específica de produto para ele.
 
-  ## Funcionalidades
+## Como executar
 
-  - Busca de usuário do GitHub a partir da home.
-  - Rota compartilhável de perfil em `/profile/:username`.
-  - Exibição de avatar, nome, login e dados públicos do perfil.
-  - Exibição de website/blog e Twitter quando disponíveis.
-  - Lista de repositórios com ordenação e direção.
-  - Infinite scroll para carregar repositórios aos poucos.
-  - Interface responsiva para mobile e desktop.
-
-  ## Botão de contato
-
-  O botão de contato foi tratado como um ponto provisório de implementação.
-
-  Estado atual:
-
-  - existe apenas no desktop;
-  - abre o perfil público do GitHub do usuário;
-  - foi mantido como solução temporária porque não havia orientação funcional final no desafio.
-
-  Observação importante:
-
-  - o comportamento do botão deve ser revisado antes da entrega final, caso haja uma regra específica de produto para ele.
-
-  ## Como executar
-
-  ```bash
-  npm install
-  npm run dev
-````
+```bash
+npm install
+npm run dev
+```
 
 Para gerar a versão de produção:
 
