@@ -21,6 +21,7 @@ const resources = {
         genericError:
           "Não foi possível carregar o perfil agora. Tente novamente.",
         openGithub: "Abrir no GitHub",
+        contactButton: "Contato",
         openWebsite: "Abrir site",
         openTwitter: "Abrir Twitter",
         statsFollowers: "Seguidores",
@@ -70,6 +71,7 @@ const resources = {
         userNotFound: "No users found with this name",
         genericError: "Could not load the profile right now. Please try again.",
         openGithub: "Open on GitHub",
+        contactButton: "Contact",
         openWebsite: "Open website",
         openTwitter: "Open Twitter",
         statsFollowers: "Followers",

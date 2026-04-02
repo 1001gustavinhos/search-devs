@@ -307,13 +307,28 @@ export function ProfilePage() {
         <Button
           type="submit"
           colorScheme="blue"
-          isDisabled={!searchUsername.trim() || searchUsername.trim() === username}
+          isDisabled={
+            !searchUsername.trim() || searchUsername.trim() === username
+          }
         >
           {t("home.searchButton")}
         </Button>
       </HStack>
 
       <UserProfileCard user={user} />
+
+      {/* Placeholder: no Figma design has this contact button but no behavior guidance was found; for now it opens the user's GitHub profile and should be replaced after orientation. */}
+      <Button
+        as={Link}
+        href={user.html_url}
+        isExternal
+        rel="noopener noreferrer"
+        colorScheme="blue"
+        variant="outline"
+        alignSelf={{ base: "stretch", md: "flex-start" }}
+      >
+        {t("profile.contactButton")}
+      </Button>
 
       <VStack align="stretch" spacing={4}>
         <HStack
