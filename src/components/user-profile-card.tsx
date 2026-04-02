@@ -134,6 +134,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
                 rel="noopener noreferrer"
                 fontWeight="bold"
                 fontSize="20px"
+                color="brand.title"
                 wordBreak="break-word"
               >
                 {displayName}
@@ -260,7 +261,12 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
 
           <Box display={{ base: "none", md: "block" }} fontSize="14px">
             {normalizedBio ? (
-              <Text my={3} fontSize="16px" fontWeight="normal">
+              <Text
+                my={3}
+                color="brand.text"
+                fontSize="16px"
+                fontWeight="normal"
+              >
                 {normalizedBio}
               </Text>
             ) : null}

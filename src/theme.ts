@@ -36,6 +36,9 @@ export const theme = extendTheme({
       baseStyle: {
         borderRadius: "6px",
         fontWeight: "semibold",
+        _focusVisible: {
+          boxShadow: "0 0 0 1px var(--chakra-colors-brand-accent)",
+        },
       },
       variants: {
         solid: {
@@ -46,6 +49,20 @@ export const theme = extendTheme({
           },
           _active: {
             bg: "#6E0FA8",
+          },
+        },
+        outline: {
+          borderColor: "brand.accent",
+          color: "brand.text",
+          _hover: {
+            bg: "#7C12BA",
+            color: "brand.surface",
+            borderColor: "#7C12BA",
+          },
+          _active: {
+            bg: "#6E0FA8",
+            color: "brand.surface",
+            borderColor: "#6E0FA8",
           },
         },
       },

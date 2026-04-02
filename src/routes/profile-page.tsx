@@ -5,14 +5,18 @@ import {
   AlertIcon,
   Box,
   Button,
+  Heading,
   IconButton,
   HStack,
   Input,
+  InputGroup,
+  InputLeftElement,
   Link,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  Stack,
   Spinner,
   Text,
   VStack,
@@ -21,6 +25,7 @@ import {
   ArrowDownWideNarrow,
   ArrowUpWideNarrow,
   Clock3,
+  Search,
   Star,
 } from "lucide-react";
 import { useNavigate, useParams } from "@tanstack/react-router";
@@ -306,226 +311,313 @@ export function ProfilePage() {
   }
 
   return (
-    <VStack align="stretch" spacing={6} maxW="760px" mx="auto" w="100%">
+    <VStack align="stretch" spacing={6} maxW="1200px" mx="auto" w="100%">
       <HStack
         as="form"
         onSubmit={handleSearchSubmit}
-        spacing={0}
-        align="stretch"
+        spacing={4}
+        align="center"
+        justify="space-between"
+        display={{ base: "none", md: "flex" }}
       >
-        <Input
-          value={searchUsername}
-          onChange={(event) => {
-            setSearchUsername(event.target.value);
-          }}
-          placeholder={t("home.searchPlaceholder")}
-          size="md"
-          bg="brand.surface"
-          flex="1"
-        />
+        <Link href="/" textDecoration="none" _hover={{ textDecoration: "none" }}>
+          <Heading
+            as="h1"
+            letterSpacing="tight"
+            fontSize="32px"
+            lineHeight="1"
+            fontWeight="medium"
+            whiteSpace="nowrap"
+            flexShrink={0}
+          >
+            <Text
+              as="span"
+              color="brand.searchBlue"
+              fontFamily="'Nunito', sans-serif"
+              fontWeight="medium"
+            >
+              Search
+            </Text>{" "}
+            <Text
+              as="span"
+              color="brand.accent"
+              fontFamily="'Nunito', sans-serif"
+              fontWeight="medium"
+            >
+              d
+            </Text>
+            <Text
+              as="span"
+              color="brand.accent"
+              fontFamily="'Nunito', sans-serif"
+              fontWeight="bold"
+            >
+              _
+            </Text>
+            <Text
+              as="span"
+              color="brand.accent"
+              fontFamily="'Nunito', sans-serif"
+              fontWeight="medium"
+            >
+              evs
+            </Text>
+          </Heading>
+        </Link>
+
+        <InputGroup flex="1" maxW="590px">
+          <InputLeftElement pointerEvents="none" color="brand.usernameDesktop">
+            <Search size={18} />
+          </InputLeftElement>
+          <Input
+            value={searchUsername}
+            onChange={(event) => {
+              setSearchUsername(event.target.value);
+            }}
+            placeholder={username}
+            size="md"
+            bg="brand.surface"
+            textAlign="left"
+            _placeholder={{
+              color: "brand.usernameDesktop",
+            }}
+          />
+        </InputGroup>
       </HStack>
 
-      <UserProfileCard user={user} />
-
-      {/* Placeholder: no Figma design has this contact button but no behavior guidance was found; for now it opens the user's GitHub profile and should be replaced after orientation. */}
-      <Button
-        as={Link}
-        href={user.html_url}
-        isExternal
-        rel="noopener noreferrer"
-        display={{ base: "none", md: "inline-flex" }}
-        alignSelf={{ base: "stretch", md: "flex-start" }}
+      <Stack
+        direction={{ base: "column", md: "row" }}
+        spacing={{ base: 6, md: 8 }}
+        align="flex-start"
+        w="100%"
       >
-        {t("profile.contactButton")}
-      </Button>
+        <VStack
+          align="stretch"
+          spacing={6}
+          w={{ base: "100%", md: "280px" }}
+          flexShrink={0}
+        >
+          <UserProfileCard user={user} />
 
-      <Box bg="brand.surface" borderRadius="4px" p={3} shadow="md">
-        <VStack align="stretch" spacing={4}>
-          <HStack justify="flex-end" align="center" spacing={4}>
-            <HStack spacing={3} w="100%" justify="flex-end">
-              <Menu>
-                <MenuButton
-                  as={Button}
+          {/* Placeholder: no Figma design has this contact button but no behavior guidance was found; for now it opens the user's GitHub profile and should be replaced after orientation. */}
+          <Button
+            as={Link}
+            href={user.html_url}
+            isExternal
+            rel="noopener noreferrer"
+            display={{ base: "none", md: "inline-flex" }}
+            w="100%"
+            color="brand.surface"
+            _hover={{
+              bg: "#7C12BA",
+              color: "brand.surface",
+            }}
+            _active={{
+              bg: "#6E0FA8",
+              color: "brand.surface",
+            }}
+          >
+            {t("profile.contactButton")}
+          </Button>
+        </VStack>
+
+        <Box
+          bg="brand.surface"
+          borderRadius="4px"
+          p={3}
+          shadow="md"
+          flex="1"
+          w="100%"
+          minW={0}
+        >
+          <VStack align="stretch" spacing={4}>
+            <HStack justify="flex-end" align="center" spacing={4}>
+              <HStack spacing={3} w="100%" justify="flex-end">
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    minW="220px"
+                    textAlign="left"
+                  >
+                    {t("profile.repositoriesSortLabel")}
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem
+                      fontWeight={
+                        repositorySort === "created" ? "semibold" : "normal"
+                      }
+                      onClick={() => {
+                        setRepositorySort("created");
+                      }}
+                    >
+                      {t("profile.sortCreated")}
+                    </MenuItem>
+                    <MenuItem
+                      fontWeight={
+                        repositorySort === "updated" ? "semibold" : "normal"
+                      }
+                      onClick={() => {
+                        setRepositorySort("updated");
+                      }}
+                    >
+                      {t("profile.sortUpdated")}
+                    </MenuItem>
+                    <MenuItem
+                      fontWeight={
+                        repositorySort === "pushed" ? "semibold" : "normal"
+                      }
+                      onClick={() => {
+                        setRepositorySort("pushed");
+                      }}
+                    >
+                      {t("profile.sortPushed")}
+                    </MenuItem>
+                    <MenuItem
+                      fontWeight={
+                        repositorySort === "full_name" ? "semibold" : "normal"
+                      }
+                      onClick={() => {
+                        setRepositorySort("full_name");
+                      }}
+                    >
+                      {t("profile.sortFullName")}
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+
+                <IconButton
                   type="button"
                   size="sm"
                   variant="outline"
-                  minW="220px"
-                  textAlign="left"
-                >
-                  {t("profile.repositoriesSortLabel")}
-                </MenuButton>
-                <MenuList>
-                  <MenuItem
-                    fontWeight={
-                      repositorySort === "created" ? "semibold" : "normal"
-                    }
-                    onClick={() => {
-                      setRepositorySort("created");
-                    }}
-                  >
-                    {t("profile.sortCreated")}
-                  </MenuItem>
-                  <MenuItem
-                    fontWeight={
-                      repositorySort === "updated" ? "semibold" : "normal"
-                    }
-                    onClick={() => {
-                      setRepositorySort("updated");
-                    }}
-                  >
-                    {t("profile.sortUpdated")}
-                  </MenuItem>
-                  <MenuItem
-                    fontWeight={
-                      repositorySort === "pushed" ? "semibold" : "normal"
-                    }
-                    onClick={() => {
-                      setRepositorySort("pushed");
-                    }}
-                  >
-                    {t("profile.sortPushed")}
-                  </MenuItem>
-                  <MenuItem
-                    fontWeight={
-                      repositorySort === "full_name" ? "semibold" : "normal"
-                    }
-                    onClick={() => {
-                      setRepositorySort("full_name");
-                    }}
-                  >
-                    {t("profile.sortFullName")}
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-
-              <IconButton
-                type="button"
-                size="sm"
-                variant="outline"
-                icon={
-                  repositoryDirection === "asc" ? (
-                    <ArrowUpWideNarrow size={18} />
-                  ) : (
-                    <ArrowDownWideNarrow size={18} />
-                  )
-                }
-                boxSize="32px"
-                minW="32px"
-                minH="32px"
-                onClick={() => {
-                  setRepositoryDirection((previousDirection) =>
-                    previousDirection === "asc" ? "desc" : "asc",
-                  );
-                }}
-                aria-label={`${t("profile.repositoriesDirectionLabel")}: ${
-                  repositoryDirection === "asc"
-                    ? t("profile.directionAsc")
-                    : t("profile.directionDesc")
-                }`}
-              />
+                  icon={
+                    repositoryDirection === "asc" ? (
+                      <ArrowUpWideNarrow size={18} />
+                    ) : (
+                      <ArrowDownWideNarrow size={18} />
+                    )
+                  }
+                  boxSize="32px"
+                  minW="32px"
+                  minH="32px"
+                  onClick={() => {
+                    setRepositoryDirection((previousDirection) =>
+                      previousDirection === "asc" ? "desc" : "asc",
+                    );
+                  }}
+                  aria-label={`${t("profile.repositoriesDirectionLabel")}: ${
+                    repositoryDirection === "asc"
+                      ? t("profile.directionAsc")
+                      : t("profile.directionDesc")
+                  }`}
+                />
+              </HStack>
             </HStack>
-          </HStack>
 
-          {isLoadingRepositories ? (
-            <HStack spacing={3}>
-              <Spinner size="sm" color="brand.accent" />
-              <Text fontSize="14px">{t("profile.repositoriesLoading")}</Text>
-            </HStack>
-          ) : null}
+            {isLoadingRepositories ? (
+              <HStack spacing={3}>
+                <Spinner size="sm" color="brand.accent" />
+                <Text fontSize="14px">{t("profile.repositoriesLoading")}</Text>
+              </HStack>
+            ) : null}
 
-          {repositoriesErrorMessage ? (
-            <Alert status="error" borderRadius="md">
-              <AlertIcon />
-              {repositoriesErrorMessage}
-            </Alert>
-          ) : null}
+            {repositoriesErrorMessage ? (
+              <Alert status="error" borderRadius="md">
+                <AlertIcon />
+                {repositoriesErrorMessage}
+              </Alert>
+            ) : null}
 
-          {!isLoadingRepositories &&
-          !repositoriesErrorMessage &&
-          repositories.length === 0 ? (
-            <Text color="brand.text" fontSize="14px">
-              {t("profile.noRepositories")}
-            </Text>
-          ) : null}
-
-          <VStack align="stretch" spacing={0}>
-            {repositories.map((repository, index) => (
-              <Box
-                key={repository.id}
-                borderRadius="4px"
-                px={{ base: 0, md: 3 }}
-                py={3}
-                bg="brand.surface"
-                boxShadow={
-                  index < repositories.length - 1
-                    ? "0 14px 20px -16px rgba(23, 25, 35, 0.6)"
-                    : "none"
-                }
-              >
-                <Link
-                  href={repository.html_url}
-                  isExternal
-                  fontWeight="bold"
-                  fontSize="20px"
-                >
-                  {repository.name}
-                </Link>
-                <Text
-                  mt={2}
-                  color="brand.text"
-                  fontSize="16px"
-                  fontWeight="normal"
-                >
-                  {repository.description ??
-                    t("profile.repositoryWithoutDescription")}
-                </Text>
-
-                <HStack
-                  mt={3}
-                  spacing={2}
-                  color="brand.text"
-                  fontSize="14px"
-                  flexWrap="wrap"
-                >
-                  <HStack spacing={1}>
-                    <InfoIcon>
-                      <Star size={18} />
-                    </InfoIcon>
-                    <Text>{repository.stargazers_count}</Text>
-                  </HStack>
-
-                  <Text aria-hidden="true">•</Text>
-
-                  <HStack spacing={1}>
-                    <InfoIcon>
-                      <Clock3 size={18} />
-                    </InfoIcon>
-                    <Text>
-                      {`${t("profile.updatedPrefix")} ${formatTimeSinceLastUpdate(
-                        repository.updated_at,
-                        i18n.language,
-                      )}`}
-                    </Text>
-                  </HStack>
-                </HStack>
-              </Box>
-            ))}
-          </VStack>
-
-          {hasMoreRepositories ? (
-            <Box ref={loadMoreTriggerRef} h="1px" />
-          ) : null}
-
-          {isLoadingMoreRepositories ? (
-            <HStack spacing={3}>
-              <Spinner size="sm" color="brand.accent" />
-              <Text fontSize="14px">
-                {t("profile.repositoriesLoadingMore")}
+            {!isLoadingRepositories &&
+            !repositoriesErrorMessage &&
+            repositories.length === 0 ? (
+              <Text color="brand.text" fontSize="14px">
+                {t("profile.noRepositories")}
               </Text>
-            </HStack>
-          ) : null}
-        </VStack>
-      </Box>
+            ) : null}
+
+            <VStack align="stretch" spacing={0}>
+              {repositories.map((repository, index) => (
+                <Box
+                  key={repository.id}
+                  borderRadius="4px"
+                  px={{ base: 0, md: 3 }}
+                  py={3}
+                  bg="brand.surface"
+                  borderBottomWidth="1px"
+                  borderBottomColor="gray.100"
+                  boxShadow={
+                    "none"
+                  }
+                >
+                  <Link
+                    href={repository.html_url}
+                    isExternal
+                    fontWeight="bold"
+                    fontSize="20px"
+                    color="brand.title"
+                  >
+                    {repository.name}
+                  </Link>
+                  <Text
+                    mt={2}
+                    color="brand.text"
+                    fontSize="16px"
+                    fontWeight="normal"
+                  >
+                    {repository.description ??
+                      t("profile.repositoryWithoutDescription")}
+                  </Text>
+
+                  <HStack
+                    mt={3}
+                    spacing={2}
+                    color="brand.text"
+                    fontSize="14px"
+                    flexWrap="wrap"
+                  >
+                    <HStack spacing={1}>
+                      <InfoIcon>
+                        <Star size={18} />
+                      </InfoIcon>
+                      <Text>{repository.stargazers_count}</Text>
+                    </HStack>
+
+                    <Text aria-hidden="true">•</Text>
+
+                    <HStack spacing={1}>
+                      <InfoIcon>
+                        <Clock3 size={18} />
+                      </InfoIcon>
+                      <Text>
+                        {`${t("profile.updatedPrefix")} ${formatTimeSinceLastUpdate(
+                          repository.updated_at,
+                          i18n.language,
+                        )}`}
+                      </Text>
+                    </HStack>
+                  </HStack>
+                </Box>
+              ))}
+            </VStack>
+
+            {hasMoreRepositories ? (
+              <Box ref={loadMoreTriggerRef} h="1px" />
+            ) : null}
+
+            {isLoadingMoreRepositories ? (
+              <HStack spacing={3}>
+                <Spinner size="sm" color="brand.accent" />
+                <Text fontSize="14px">
+                  {t("profile.repositoriesLoadingMore")}
+                </Text>
+              </HStack>
+            ) : null}
+          </VStack>
+        </Box>
+      </Stack>
     </VStack>
   );
 }
